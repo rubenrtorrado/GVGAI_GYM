@@ -38,11 +38,13 @@ class ClientCommGYM:
         self.lastSsoType = LEARNING_SSO_TYPE.JSON
 
         gameId=0
-        serverDir = '/home/jupyter/Notebooks/ruben/GVGAI2/'
+        # REQUIREMENT: clone the `gvgai` repository in your home
+        # `user@pc:~$ git clone https://github.com/EssexUniversityMCTS/gvgai.git`
+        serverDir = path.expanduser('~') + '/gvgai'
         # agentName = 'jupyter.Agent'
-        shDir = '/home/jupyter/Notebooks/ruben/GVGAI2/clients/GVGAI-PythonClient/src/utils'
+        shDir = serverDir + '/clients/GVGAI-PythonClient/src/utils'
         visuals = False
-        gamesDir = '/home/jupyter/Notebooks/ruben/GVGAI2/'
+        gamesDir = serverDir
         gameFile = ''
         levelFile = ''
         serverJar=''
