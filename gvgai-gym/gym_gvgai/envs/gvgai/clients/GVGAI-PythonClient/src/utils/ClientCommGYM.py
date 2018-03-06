@@ -2,7 +2,6 @@ import json
 import logging
 import sys
 import os
-import os.path as path
 
 from scipy import misc
 
@@ -26,7 +25,7 @@ class ClientCommGYM:
      * Client communication, set up the socket for a given agent
     """
 
-    def __init__(self):
+    def __init__(self, gameId, pathStr):
         self.TOKEN_SEP = '#'
         self.io = IOSocket(CompetitionParameters.SOCKET_PORT)
         self.sso = SerializableStateObservation()
@@ -37,25 +36,20 @@ class ClientCommGYM:
         self.global_ect = None
         self.lastSsoType = LEARNING_SSO_TYPE.JSON
 
-        gameId=0
-        # REQUIREMENT: clone the `gvgai` repository in your home
-        # `user@pc:~$ git clone https://github.com/EssexUniversityMCTS/gvgai.git`
-        serverDir = path.expanduser('~') + '/gvgai'
-        # agentName = 'jupyter.Agent'
-        shDir = serverDir + '/clients/GVGAI-PythonClient/src/utils'
+        serverDir = os.path.join(pathStr, 'gvgai') 
+        agentName = 'gym.Agent'
+        shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils')
         visuals = False
-        gamesDir = serverDir
+        gamesDir = os.path.join(pathStr, 'games')
         gameFile = ''
         levelFile = ''
-        serverJar=''
+        serverJar = ''
 
-        sys.path.append(shDir)
+        #sys.path.append(shDir)
+        scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
 
-        scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh " + str(gameId) + " " + str(serverDir) +
-                                      " " + str(visuals))
-
-        p = subprocess.Popen(scriptFile, shell=True)
-
+        p = subprocess.run([scriptFile, str(gameId), serverDir, str(visuals)])
+        print('hi')
         self.startComm()
 
     def startComm(self):
@@ -68,14 +62,12 @@ class ClientCommGYM:
      * @throws IOException
     """
 
-
-
     def reset(self):
 
         #flag=True
         #self.line = ''
 
-
+        
         if hasattr(self,'line'):
             flag=True
             end_message = "END_TRAINING"
@@ -116,19 +108,19 @@ class ClientCommGYM:
             self.line = self.io.readLine()
             self.line = self.line.rstrip("\r\n")
             self.processLine(self.line)
-
+            
         if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH":
             self.sso.image = misc.imread('gameStateByBytes.png')
             self.sso.Terminal=True
         else:
             self.sso.Terminal=False
+        
 
-        return self.sso.image,self.sso.gameScore, self.sso.Terminal
+        return self.sso.image,self.sso.gameScore, self.sso.Terminal     #self.sso.image[:,:,:3]
 
     def action_space(self):
         return len(self.sso.availableActions)
-
-
+    
     def as_sso(self, d):
         self.sso.__dict__.update(d)
         return self.sso

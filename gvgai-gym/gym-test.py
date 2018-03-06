@@ -5,9 +5,6 @@ env.reset()
 for i in range(100):
     #env.render()
     image, score, end, info = env.step(env.action_space.sample()) # take a random action
-    if(end):
-    	print(i)
-    	break
 
 #Probably have issues running twice on same machine
 	#Log files will clash
