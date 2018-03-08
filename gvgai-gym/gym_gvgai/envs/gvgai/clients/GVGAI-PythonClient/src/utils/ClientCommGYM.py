@@ -38,18 +38,20 @@ class ClientCommGYM:
         
         self.sso.Terminal=False
 
-        serverDir = os.path.join(pathStr, 'gvgai') 
+        serverDir = os.path.join(pathStr, 'gvgai').replace(' ', '\ ')
         #agentName = 'gym.Agent'
-        shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils')
+        shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils').replace(' ', '\ ')
         visuals = False
-        gamesDir = os.path.join(pathStr, 'games')
+        gamesDir = os.path.join(pathStr, 'games').replace(' ', '\ ')
         gameFile = ''
         levelFile = ''
         serverJar=''
 
         #sys.path.append(self.shDir)
         scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
-        p = subprocess.run([scriptFile, str(gameId), serverDir, str(visuals)])
+        scriptFile = scriptFile + " " + str(gameId) + " " +  str(serverDir) + " " + str(visuals)
+        p = subprocess.Popen(scriptFile, shell = True)
+        #"run as shell behavior vs not"
 
         self.startComm()
 

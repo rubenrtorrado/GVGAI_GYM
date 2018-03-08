@@ -17,7 +17,6 @@ import static core.competition.CompetitionParameters.IMG_PATH;
 public class JavaServer {
 
     public static void main(String[] args) throws Exception {
-        System.out.println( "Welcome to Java Programming!" );
         /** Init params */
         //Phil
         // String gameName = "aliens"
