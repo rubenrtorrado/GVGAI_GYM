@@ -2,10 +2,20 @@ import gym
 import gym_gvgai
 env = gym.make('aliens-gvgai-v0')	#Can't specify levels yet
 env.reset()
-for i in range(100):
+
+import timeit
+
+start = timeit.timeit()
+
+for i in range(1000):
     #env.render()
     image, score, end, info = env.step(env.action_space.sample()) # take a random action
+    if(end):
+    	print(i)
+    	break
+end = timeit.timeit()
 
+print(end - start)
 #Probably have issues running twice on same machine
 	#Log files will clash
 	#Socket numbers will clash

@@ -28,7 +28,8 @@ class GVGAI_Env(gym.Env):
         print("GVGAI_Env - Version {}".format(self.__version__))
 
         gameID = temp_game_id(game)
-        self.GVGAI = gvgai.ClientCommGYM(gameID, dir)
+        #self.GVGAI = gvgai.ClientCommGYM(gameID, dir)
+        self.GVGAI = gvgai.ClientCommGYM()
 
         #Only allow gridphysics games for now
         #Get number of moves for a selected game
@@ -38,6 +39,8 @@ class GVGAI_Env(gym.Env):
         #screen_height, screen_width = self.GVGAI.gameSize()
         self.observation_space = spaces.Box(low=0, high=255, shape=(110, 300, 4), dtype=np.uint8)
         print("GET SCREEN DIMENSIONS!!! (FIX: Right now just 200x200)")
+        
+        self.img = ''
 
     def step(self, action):
         """
@@ -59,6 +62,7 @@ class GVGAI_Env(gym.Env):
         """
         state, reward, isOver = self.GVGAI.step(action)
         
+        self.img = state
         return state, reward, isOver, {}
 
     def reset(self):
@@ -73,7 +77,7 @@ class GVGAI_Env(gym.Env):
     def render(self, mode='human', close=False):
         #Add rendering capability
         #If we add render, add close
-        return
+        return self.img
 
 def temp_game_id(name):
     #Move games out of examples folder

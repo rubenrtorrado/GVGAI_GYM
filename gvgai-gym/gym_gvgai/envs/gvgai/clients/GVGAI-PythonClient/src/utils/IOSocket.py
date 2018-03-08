@@ -68,7 +68,10 @@ class IOSocket:
             print ("Read from server [FAILED]")
             traceback.print_exc()
             sys.exit()
-
+    
+    def shutDown(self):
+        self.socket.shutdown(0)
+    
     def recv_end(self):
         total_data = []
         data = ''

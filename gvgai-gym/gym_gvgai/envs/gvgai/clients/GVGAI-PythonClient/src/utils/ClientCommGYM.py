@@ -1,7 +1,11 @@
+from IPython.core.debugger import Tracer
+
 import json
 import logging
 import sys
 import os
+import os.path as path
+import socket
 
 from scipy import misc
 
@@ -25,7 +29,7 @@ class ClientCommGYM:
      * Client communication, set up the socket for a given agent
     """
 
-    def __init__(self, gameId, pathStr):
+    def __init__(self):
         self.TOKEN_SEP = '#'
         self.io = IOSocket(CompetitionParameters.SOCKET_PORT)
         self.sso = SerializableStateObservation()
@@ -35,21 +39,26 @@ class ClientCommGYM:
         self.player = None
         self.global_ect = None
         self.lastSsoType = LEARNING_SSO_TYPE.JSON
+        
+        self.sso.Terminal=False
 
-        serverDir = os.path.join(pathStr, 'gvgai') 
-        agentName = 'gym.Agent'
-        shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils')
-        visuals = False
-        gamesDir = os.path.join(pathStr, 'games')
-        gameFile = ''
-        levelFile = ''
-        serverJar = ''
+        self.gameId=0
+        self.serverDir = '/home/jupyter/Notebooks/ruben/GVGAI2/'
+        # agentName = 'jupyter.Agent'
+        self.shDir = '/home/jupyter/Notebooks/ruben/GVGAI2/clients/GVGAI-PythonClient/src/utils'
+        self.visuals = False
+        self.gamesDir = '/home/jupyter/Notebooks/ruben/GVGAI2/'
+        self.gameFile = ''
+        self.levelFile = ''
+        self.serverJar=''
 
-        #sys.path.append(shDir)
-        scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
+        sys.path.append(self.shDir)
 
-        p = subprocess.run([scriptFile, str(gameId), serverDir, str(visuals)])
-        print('hi')
+        scriptFile = os.path.join(self.shDir, "runServer_nocompile_python.sh " + str(self.gameId) + " " + str(self.serverDir) +
+                                      " " + str(self.visuals))
+
+        self.p = subprocess.Popen(scriptFile, shell=True)
+
         self.startComm()
 
     def startComm(self):
@@ -62,26 +71,52 @@ class ClientCommGYM:
      * @throws IOException
     """
 
+
+
     def reset(self):
 
         #flag=True
         #self.line = ''
-
+        self.lastScore=0
         
         if hasattr(self,'line'):
             flag=True
-            end_message = "END_TRAINING"
-            self.io.writeToServer(self.lastMessageId, end_message, self.LOG)
-            self.line = ''
+            restart=True
+            
+            #self.io.writeToServer(self.lastMessageId, "END_TRAINING", self.LOG)
+            
+            #self.line = self.io.readLine()
+            #self.line = self.line.rstrip("\r\n")
+            #self.processLine(self.line)
+            
+            if self.sso.Terminal:
+                nextLevel=0
+                self.io.writeToServer(self.lastMessageId, str(nextLevel) + "#" + self.lastSsoType, self.LOG)
+            else:
+            
+                self.io.writeToServer(self.lastMessageId, "END_OVERSPENT", self.LOG)
+            
+                self.line = self.io.readLine()
+                self.line = self.line.rstrip("\r\n")
+                self.processLine(self.line)
+            
+                nextLevel=0
+                self.io.writeToServer(self.lastMessageId, str(nextLevel) + "#" + self.lastSsoType, self.LOG)
+
         else:
+            restart=True
             flag=True
+            #self.startComm()
             self.line = ''
 
 
         while flag:
-            self.line = self.io.readLine()
-            self.line = self.line.rstrip("\r\n")
-            self.processLine(self.line)
+            if restart:
+                self.line = self.io.readLine()
+                self.line = self.line.rstrip("\r\n")
+                self.processLine(self.line)
+            else:
+                self.line=''
 
             if self.sso.phase == Phase.START:
                 self.start()
@@ -93,12 +128,25 @@ class ClientCommGYM:
 
             elif self.sso.phase == "ACT":
                 flag=False
-                self.sso.Terminal=False
+                
+                
+                for i in range(2):
+                    self.act(0)
+                    self.line = self.io.readLine()
+                    self.line = self.line.rstrip("\r\n")
+                    self.processLine(self.line)
+                
+                if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH":
+                    self.sso.image = misc.imread('gameStateByBytes.png')
+                    self.sso.Terminal=True
+                    self.lastScore=0
+                else:
+                    self.sso.Terminal=False
 
         return self.sso.image
 
 
-
+ 
 
     def step(self,act):
         #self.sso.phase = Phase.ACT
@@ -109,18 +157,27 @@ class ClientCommGYM:
             self.line = self.line.rstrip("\r\n")
             self.processLine(self.line)
             
-        if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH":
+            Score=self.sso.gameScore-self.lastScore
+            self.lastScore=self.sso.gameScore
+        else:
+            Score=0
+        
+        if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT":
             self.sso.image = misc.imread('gameStateByBytes.png')
             self.sso.Terminal=True
+            self.lastScore=0
+            Score=0
         else:
             self.sso.Terminal=False
         
-
-        return self.sso.image,self.sso.gameScore, self.sso.Terminal     #self.sso.image[:,:,:3]
+        
+        
+        return self.sso.image,Score, self.sso.Terminal
 
     def action_space(self):
         return len(self.sso.availableActions)
-    
+
+
     def as_sso(self, d):
         self.sso.__dict__.update(d)
         return self.sso
