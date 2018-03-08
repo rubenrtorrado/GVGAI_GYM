@@ -28,8 +28,7 @@ class GVGAI_Env(gym.Env):
         print("GVGAI_Env - Version {}".format(self.__version__))
 
         gameID = temp_game_id(game)
-        #self.GVGAI = gvgai.ClientCommGYM(gameID, dir)
-        self.GVGAI = gvgai.ClientCommGYM()
+        self.GVGAI = gvgai.ClientCommGYM(gameID, dir)
 
         #Only allow gridphysics games for now
         #Get number of moves for a selected game

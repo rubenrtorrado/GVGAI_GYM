@@ -1,11 +1,7 @@
-from IPython.core.debugger import Tracer
-
 import json
 import logging
 import sys
 import os
-import os.path as path
-import socket
 
 from scipy import misc
 
@@ -29,7 +25,7 @@ class ClientCommGYM:
      * Client communication, set up the socket for a given agent
     """
 
-    def __init__(self):
+    def __init__(self, gameId, pathStr):
         self.TOKEN_SEP = '#'
         self.io = IOSocket(CompetitionParameters.SOCKET_PORT)
         self.sso = SerializableStateObservation()
@@ -42,22 +38,18 @@ class ClientCommGYM:
         
         self.sso.Terminal=False
 
-        self.gameId=0
-        self.serverDir = '/home/jupyter/Notebooks/ruben/GVGAI2/'
-        # agentName = 'jupyter.Agent'
-        self.shDir = '/home/jupyter/Notebooks/ruben/GVGAI2/clients/GVGAI-PythonClient/src/utils'
-        self.visuals = False
-        self.gamesDir = '/home/jupyter/Notebooks/ruben/GVGAI2/'
-        self.gameFile = ''
-        self.levelFile = ''
-        self.serverJar=''
+        serverDir = os.path.join(pathStr, 'gvgai') 
+        #agentName = 'gym.Agent'
+        shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils')
+        visuals = False
+        gamesDir = os.path.join(pathStr, 'games')
+        gameFile = ''
+        levelFile = ''
+        serverJar=''
 
-        sys.path.append(self.shDir)
-
-        scriptFile = os.path.join(self.shDir, "runServer_nocompile_python.sh " + str(self.gameId) + " " + str(self.serverDir) +
-                                      " " + str(self.visuals))
-
-        self.p = subprocess.Popen(scriptFile, shell=True)
+        #sys.path.append(self.shDir)
+        scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
+        p = subprocess.run([scriptFile, str(gameId), serverDir, str(visuals)])
 
         self.startComm()
 

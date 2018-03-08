@@ -23,6 +23,7 @@ print(end - start)
 #TODO:
 	#Allow level selection
 	#Get game screen size
+	#Make sure java server shuts down correctly
 	#Get available moves for a game
 	#Make game selection not based on a file list
 	#Turn GVGAI into a jar file
