@@ -11,9 +11,9 @@ for i in range(1000):
     #env.render()
     image, score, end, info = env.step(env.action_space.sample()) # take a random action
     if(end):
-    	print(i)
+    	print("Rounds: {}".format(i))
     	break
-end = timeit.timeit()
+finish = timeit.timeit()
 
 print(end - start)
 #Probably have issues running twice on same machine

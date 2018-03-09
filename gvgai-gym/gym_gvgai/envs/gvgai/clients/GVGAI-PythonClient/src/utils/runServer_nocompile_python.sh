@@ -17,8 +17,6 @@ fi
 server_dir="${server_dir_prefix}/src"
 build_folder='server-out'
 
-echo "Server_dir: $server_dir"
-
 rm -rf ${build_folder}
 mkdir -p ${build_folder}
 find "$server_dir" -name "*.java" | sed 's/\(.*\)/"\1"/g' > sources.txt

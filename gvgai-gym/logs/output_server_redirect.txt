@@ -1,4 +1,4 @@
 [GAME] Game idx:0 game name aliens
 [PHASE] Starting First Phase of Training in 3 levels.
-Too long: 0(exceeding 27ms): controller disqualified.
+Too long: 0(exceeding 19ms): controller disqualified.
 [TRAINING] Result (1->win; 0->lose): level:0, Player0:-100, Player0-Score:-1000.0, timesteps:0

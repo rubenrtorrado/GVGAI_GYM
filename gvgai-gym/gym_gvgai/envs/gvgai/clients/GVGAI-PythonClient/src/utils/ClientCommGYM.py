@@ -151,7 +151,8 @@ class ClientCommGYM:
             self.line = self.line.rstrip("\r\n")
             self.processLine(self.line)
             
-            Score=self.sso.gameScore-self.lastScore
+            #Score=self.sso.gameScore-self.lastScore
+            Score = self.reward()
             self.lastScore=self.sso.gameScore
         else:
             Score=0
@@ -167,6 +168,15 @@ class ClientCommGYM:
         
         
         return self.sso.image,Score, self.sso.Terminal
+
+    def reward(self):
+        scoreDelta = self.sso.gameScore-self.lastScore
+        if(self.sso.gameWinner=='WINNER' or scoreDelta > 0):
+            return 1
+        elif(self.sso.isGameOver or scoreDelta < 0):
+            return -1
+        else:
+            return 0
 
     def action_space(self):
         return len(self.sso.availableActions)
@@ -271,9 +281,9 @@ class ClientCommGYM:
                 self.parse_json(js)
                 # self.sso = json.loads(js, object_hook=self.as_sso)
             if self.sso.phase == "ACT":
-                if self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == "IMAGE" \
-                        or self.lastSsoType == LEARNING_SSO_TYPE.BOTH or self.lastSsoType == "BOTH":
-                    if self.sso.imageArray:
+                if(self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == "IMAGE" \
+                        or self.lastSsoType == LEARNING_SSO_TYPE.BOTH or self.lastSsoType == "BOTH"):
+                    if(self.sso.imageArray):
                         self.sso.convertBytesToPng(self.sso.imageArray)
                         self.sso.image = misc.imread('gameStateByBytes.png')
 
