@@ -54,7 +54,10 @@ class ClientCommGYM:
         #"run as shell behavior vs not"
 
         self.startComm()
-        self.reset()
+        
+        #change that
+        for _ in range(3):
+            self.reset()
 
     def startComm(self):
         self.io.initBuffers()
@@ -84,13 +87,16 @@ class ClientCommGYM:
         else:
             Score=0
         
-        if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT":
+        if self.sso.isGameOver==True or self.sso.gameWinner=='PLAYER_WINS' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT":
             self.sso.image = misc.imread('gameStateByBytes.png')
             self.sso.Terminal=True
-            self.lastScore=0
-            Score=0
+            #self.lastScore=0
+            #Score = self.lastScore
+            #self.lastScore=self.sso.gameScore
         else:
             self.sso.Terminal=False
+        
+      
         
         return self.sso.image,Score, self.sso.Terminal
 
@@ -149,7 +155,8 @@ class ClientCommGYM:
 
             elif self.sso.phase == "ACT":
                 flag=False                
-
+                
+                
                 for i in range(1):
                     self.act(0)
                     self.line = self.io.readLine()
@@ -157,11 +164,13 @@ class ClientCommGYM:
                     self.processLine(self.line)
                     
                 if(self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH"):
+                    
                     self.sso.image = misc.imread('gameStateByBytes.png')
                     self.sso.Terminal=True
                     self.lastScore=0
                 else:
                     self.sso.Terminal=False
+                
 
         return self.sso.image
 
