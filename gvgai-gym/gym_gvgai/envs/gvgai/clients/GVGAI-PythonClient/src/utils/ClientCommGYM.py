@@ -50,10 +50,11 @@ class ClientCommGYM:
         #sys.path.append(self.shDir)
         scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
         scriptFile = scriptFile + " " + str(gameId) + " " +  str(serverDir) + " " + str(visuals)
-        p = subprocess.Popen(scriptFile, shell = True)
+        self.java = subprocess.Popen("exec " + scriptFile, shell=True)
         #"run as shell behavior vs not"
 
         self.startComm()
+        self.reset()
 
     def startComm(self):
         self.io.initBuffers()
@@ -65,7 +66,33 @@ class ClientCommGYM:
      * @throws IOException
     """
 
-
+    def step(self,act):
+        #self.sso.phase = Phase.ACT
+        if not self.sso.Terminal:
+            if(act == 0):
+                self.act("")
+            else:
+                action = self.sso.availableActions[act - 1]
+                self.act(action)
+            self.line = self.io.readLine()
+            self.line = self.line.rstrip("\r\n")
+            self.processLine(self.line)
+            
+            #Score=self.sso.gameScore-self.lastScore
+            Score = self.reward()
+            self.lastScore=self.sso.gameScore
+        else:
+            Score=0
+        
+        if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT":
+            self.sso.image = misc.imread('gameStateByBytes.png')
+            self.sso.Terminal=True
+            self.lastScore=0
+            Score=0
+        else:
+            self.sso.Terminal=False
+        
+        return self.sso.image,Score, self.sso.Terminal
 
     def reset(self):
 
@@ -121,16 +148,15 @@ class ClientCommGYM:
                 self.init()
 
             elif self.sso.phase == "ACT":
-                flag=False
-                
-                
-                for i in range(2):
+                flag=False                
+
+                for i in range(1):
                     self.act(0)
                     self.line = self.io.readLine()
                     self.line = self.line.rstrip("\r\n")
                     self.processLine(self.line)
-                
-                if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH":
+                    
+                if(self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH"):
                     self.sso.image = misc.imread('gameStateByBytes.png')
                     self.sso.Terminal=True
                     self.lastScore=0
@@ -139,48 +165,22 @@ class ClientCommGYM:
 
         return self.sso.image
 
-
- 
-
-    def step(self,act):
-        #self.sso.phase = Phase.ACT
-        if not self.sso.Terminal:
-            action=self.sso.availableActions[act]
-            self.act(action)
-            self.line = self.io.readLine()
-            self.line = self.line.rstrip("\r\n")
-            self.processLine(self.line)
-            
-            #Score=self.sso.gameScore-self.lastScore
-            Score = self.reward()
-            self.lastScore=self.sso.gameScore
-        else:
-            Score=0
-        
-        if self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT":
-            self.sso.image = misc.imread('gameStateByBytes.png')
-            self.sso.Terminal=True
-            self.lastScore=0
-            Score=0
-        else:
-            self.sso.Terminal=False
-        
-        
-        
-        return self.sso.image,Score, self.sso.Terminal
+    # def reward(self):
+    #     scoreDelta = self.sso.gameScore-self.lastScore
+    #     if(self.sso.gameWinner=='WINNER' or scoreDelta > 0):
+    #         return 1
+    #     elif(self.sso.isGameOver or scoreDelta < 0):
+    #         return -1
+    #     else:
+    #         return 0
 
     def reward(self):
         scoreDelta = self.sso.gameScore-self.lastScore
-        if(self.sso.gameWinner=='WINNER' or scoreDelta > 0):
-            return 1
-        elif(self.sso.isGameOver or scoreDelta < 0):
-            return -1
-        else:
-            return 0
+        return scoreDelta
 
-    def action_space(self):
-        return len(self.sso.availableActions)
-
+    def actions(self):
+        nil = ["ACTION_NIL"]
+        return nil + self.sso.availableActions
 
     def as_sso(self, d):
         self.sso.__dict__.update(d)
@@ -340,3 +340,6 @@ class ClientCommGYM:
                 self.io.writeToServer(self.lastMessageId, "ACTION_NIL" + "#" + self.lastSsoType, self.LOG)
         else:
             self.io.writeToServer(self.lastMessageId, action + "#" + self.lastSsoType, self.LOG)
+
+    def __del__(self):
+        self.java.kill()

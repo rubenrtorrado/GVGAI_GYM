@@ -23,7 +23,7 @@ find "$server_dir" -name "*.java" | sed 's/\(.*\)/"\1"/g' > sources.txt
 javac -d ${build_folder} @sources.txt
 
 if [ "${visuals}" = "True" ]; then
-    java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" -visuals > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
+    exec java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" -visuals > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
 else
-    java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
+    exec java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
 fi
