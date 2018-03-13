@@ -2,6 +2,7 @@ import json
 import logging
 import sys
 import os
+import random
 
 from scipy import misc
 
@@ -26,6 +27,8 @@ class ClientCommGYM:
     """
 
     def __init__(self, gameId, pathStr):
+        self.setInstanceDirectory()
+
         self.TOKEN_SEP = '#'
         address = IOSocket.getOpenAddress()
         self.io = IOSocket(address)
@@ -349,6 +352,11 @@ class ClientCommGYM:
                 self.io.writeToServer(self.lastMessageId, "ACTION_NIL" + "#" + self.lastSsoType, self.LOG)
         else:
             self.io.writeToServer(self.lastMessageId, action + "#" + self.lastSsoType, self.LOG)
+
+    def setInstanceDirectory(self):
+        name = 'run_{}'.format(os.getpid())
+        os.makedirs(name, exist_ok = True)
+        os.chdir(name)
 
     # def updateJavaPort(self, pathStr, port):
     #     filePath = os.path.join(pathStr, 'gvgai', 'src', 'core', 'competition', 'CompetitionParameters.java')
