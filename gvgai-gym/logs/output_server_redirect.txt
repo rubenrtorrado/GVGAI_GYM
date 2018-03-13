@@ -1,9 +1,8 @@
-[GAME] Game idx:83 game name waitforbreakfast
+[GAME] Game idx:0 game name aliens
 [PHASE] Starting First Phase of Training in 3 levels.
+Overspent: 0(exceeding 5ms): applying ACTION_NIL.
 [TRAINING] Result (1->win; 0->lose): level:0, Player0:-1, Player0-Score:0.0, timesteps:1
-[TRAINING] Result (1->win; 0->lose): level:1, Player0:1, Player0-Score:1.0, timesteps:36
+[TRAINING] Result (1->win; 0->lose): level:1, Player0:-1, Player0-Score:0.0, timesteps:1
 [TRAINING] Result (1->win; 0->lose): level:2, Player0:-1, Player0-Score:0.0, timesteps:1
 [PHASE] Starting Second Phase of Training in 3 levels.
-[TRAINING] Result (1->win; 0->lose): level:0, Player0:-1, Player0-Score:0.0, timesteps:1
-[TRAINING] Result (1->win; 0->lose): level:0, Player0:-1, Player0-Score:0.0, timesteps:1
-[TRAINING] Result (1->win; 0->lose): level:0, Player0:-1, Player0-Score:0.0, timesteps:1
+[TRAINING] Result (1->win; 0->lose): level:0, Player0:0, Player0-Score:17.0, timesteps:282

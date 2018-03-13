@@ -7,6 +7,7 @@ game_id=$1
 server_dir_prefix=$2
 games_prefix=$2
 visuals=$3
+port=$4
 
 DIRECTORY='./logs'
 if [ ! -d "$DIRECTORY" ]; then
@@ -23,7 +24,7 @@ find "$server_dir" -name "*.java" | sed 's/\(.*\)/"\1"/g' > sources.txt
 javac -d ${build_folder} @sources.txt
 
 if [ "${visuals}" = "True" ]; then
-    exec java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" -visuals > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
+    exec java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" -visuals -portNum ${port} > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
 else
-    exec java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
+    exec java -classpath ${build_folder} tracks.singleLearning.utils.JavaServer -gameId ${game_id} -gamesDir "${games_prefix}" -portNum ${port} > ${DIRECTORY}/output_server_redirect.txt 2> ${DIRECTORY}/output_server_redirect_err.txt
 fi

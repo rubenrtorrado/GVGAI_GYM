@@ -12,6 +12,7 @@ for i in range(1000):
     image, score, end, info = env.step(env.action_space.sample()) # take a random action
     if(end):
     	print("Rounds: {}".format(i))
+    	print("Score: {}".format(score))
     	break
 finish = timeit.timeit()
 

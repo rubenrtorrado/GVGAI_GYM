@@ -13,12 +13,11 @@ class IOSocket:
      * Socket for communication
     """
 
-    def __init__(self, port):
+    def __init__(self, address):
         self.BUFF_SIZE = 8192
         self.END = '\n'
         self.TOKEN_SEP = '#'
-        self.port = port
-        self.hostname = "127.0.0.1"
+        self.hostname, self.port = address
         self.connected = False
         self.socket = None
         self.logfilename = os.path.normpath("./logs/clientLog.txt")
@@ -71,6 +70,13 @@ class IOSocket:
     
     def shutDown(self):
         self.socket.shutdown(0)
+
+    def getOpenAddress():
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("localhost",0))
+        address = s.getsockname()
+        s.close()
+        return address
     
     def recv_end(self):
         total_data = []
@@ -89,3 +95,4 @@ class IOSocket:
                     total_data.pop()
                     break
         return ''.join(total_data)
+

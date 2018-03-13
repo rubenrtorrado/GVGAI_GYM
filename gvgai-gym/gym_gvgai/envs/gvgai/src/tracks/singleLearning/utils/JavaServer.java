@@ -22,6 +22,7 @@ public class JavaServer {
         // String gameName = "aliens"
         // String gameLvls = "{1}"
         int gameIdx = 0;
+        int portNum = 8080;
         String clientType = "java"; //"python"; // Type of client to test against (Python/Java)
         String shDir = "src/tracks/singleLearning/utils";
         String clientDir = ".";
@@ -56,6 +57,9 @@ public class JavaServer {
         // if (params.containsKey("gameLvls")) {
         //     gameLvls = params.get("gameLvls").get(0);
         // }
+        if (params.containsKey("portNum")) {
+            portNum = Integer.parseInt(params.get("portNum").get(0));
+        }
         if (params.containsKey("gameId")) {
             gameIdx = Integer.parseInt(params.get("gameId").get(0));
         }
@@ -85,7 +89,8 @@ public class JavaServer {
         ElapsedWallTimer wallClock = new ElapsedWallTimer();
 
         //Port for the socket.
-        String port = CompetitionParameters.SOCKET_PORT + "";
+        //String port = CompetitionParameters.SOCKET_PORT + "";
+        String port = portNum + "";
 
         //Building the command line
         String cmd[] = new String[]{null, null, port, clientType};

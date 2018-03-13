@@ -27,7 +27,8 @@ class ClientCommGYM:
 
     def __init__(self, gameId, pathStr):
         self.TOKEN_SEP = '#'
-        self.io = IOSocket(CompetitionParameters.SOCKET_PORT)
+        address = IOSocket.getOpenAddress()
+        self.io = IOSocket(address)
         self.sso = SerializableStateObservation()
         #self.agentName = agentName
         self.lastMessageId = 0
@@ -49,9 +50,8 @@ class ClientCommGYM:
 
         #sys.path.append(self.shDir)
         scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
-        scriptFile = scriptFile + " " + str(gameId) + " " +  str(serverDir) + " " + str(visuals)
+        scriptFile = scriptFile + " " + str(gameId) + " " +  str(serverDir) + " " + str(visuals) + " " + str(address[1])
         self.java = subprocess.Popen("exec " + scriptFile, shell=True)
-        #"run as shell behavior vs not"
 
         self.startComm()
         
@@ -87,7 +87,7 @@ class ClientCommGYM:
         else:
             Score=0
         
-        if self.sso.isGameOver==True or self.sso.gameWinner=='PLAYER_WINS' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT":
+        if self.sso.isGameOver==True or self.sso.gameWinner=='PLAYER_WINS' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT" or self.sso.phase=="End":
             self.sso.image = misc.imread('gameStateByBytes.png')
             self.sso.Terminal=True
             #self.lastScore=0
@@ -163,7 +163,7 @@ class ClientCommGYM:
                     self.line = self.line.rstrip("\r\n")
                     self.processLine(self.line)
                     
-                if(self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH"):
+                if(self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH" or self.sso.phase == "End"):
                     
                     self.sso.image = misc.imread('gameStateByBytes.png')
                     self.sso.Terminal=True
@@ -350,5 +350,22 @@ class ClientCommGYM:
         else:
             self.io.writeToServer(self.lastMessageId, action + "#" + self.lastSsoType, self.LOG)
 
+    # def updateJavaPort(self, pathStr, port):
+    #     filePath = os.path.join(pathStr, 'gvgai', 'src', 'core', 'competition', 'CompetitionParameters.java')
+    #     key = 'SOCKET_PORT = '
+
+    #     with open(filePath, 'r') as file:
+    #         dataString = file.read()
+
+    #     portIdx = dataString.index(key) + len(key)
+    #     endPortIdx = dataString.index(';', portIdx)
+    #     newString = dataString[:portIdx] + str(port) + dataString[endPortIdx:]
+
+    #     with open('filePath', 'w') as file:
+    #         file.write(newString)
+
     def __del__(self):
-        self.java.kill()
+        try:
+            self.java.kill()
+        except:
+            pass
