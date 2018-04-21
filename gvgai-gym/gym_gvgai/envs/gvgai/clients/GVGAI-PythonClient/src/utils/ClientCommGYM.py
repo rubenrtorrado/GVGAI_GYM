@@ -4,6 +4,8 @@ import sys
 import os
 import random
 
+from IPython.core.debugger import Tracer
+
 from scipy import misc
 
 import subprocess
@@ -39,6 +41,11 @@ class ClientCommGYM:
         self.player = None
         self.global_ect = None
         self.lastSsoType = LEARNING_SSO_TYPE.JSON
+        #levels
+        self.random_level=True
+        self.U_L=3
+        self.L_L=0
+        
         
         self.sso.Terminal=False
 
@@ -108,19 +115,20 @@ class ClientCommGYM:
         #flag=True
         #self.line = ''
         self.lastScore=0
-        
         if hasattr(self,'line'):
             flag=True
             restart=True
+            rereset=False
             
             #self.io.writeToServer(self.lastMessageId, "END_TRAINING", self.LOG)
             
             #self.line = self.io.readLine()
             #self.line = self.line.rstrip("\r\n")
             #self.processLine(self.line)
-            
+            #Tracer()()
             if self.sso.Terminal:
-                nextLevel=0
+                #nextLevel=0
+                nextLevel=self.next_level()
                 self.io.writeToServer(self.lastMessageId, str(nextLevel) + "#" + self.lastSsoType, self.LOG)
             else:
             
@@ -130,7 +138,8 @@ class ClientCommGYM:
                 self.line = self.line.rstrip("\r\n")
                 self.processLine(self.line)
             
-                nextLevel=0
+                #nextLevel=0
+                nextLevel=self.next_level()
                 self.io.writeToServer(self.lastMessageId, str(nextLevel) + "#" + self.lastSsoType, self.LOG)
 
         else:
@@ -138,6 +147,7 @@ class ClientCommGYM:
             flag=True
             #self.startComm()
             self.line = ''
+            rereset=True
 
 
         while flag:
@@ -173,19 +183,21 @@ class ClientCommGYM:
                     self.lastScore=0
                 else:
                     self.sso.Terminal=False
+        
+        if rereset:
+            self.reset()
                 
 
         return self.sso.image
 
-    # def reward(self):
-    #     scoreDelta = self.sso.gameScore-self.lastScore
-    #     if(self.sso.gameWinner=='WINNER' or scoreDelta > 0):
-    #         return 1
-    #     elif(self.sso.isGameOver or scoreDelta < 0):
-    #         return -1
-    #     else:
-    #         return 0
 
+    def next_level(self):
+        if self.random_level:
+            return random.randint(self.L_L,self.U_L)
+        else:
+            return 0
+        
+    
     def reward(self):
         scoreDelta = self.sso.gameScore-self.lastScore
         return scoreDelta
