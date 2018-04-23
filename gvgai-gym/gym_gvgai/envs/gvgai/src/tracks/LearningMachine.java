@@ -165,6 +165,37 @@ public class LearningMachine {
 
         level_idx = 0;
         int levelOutcome = 0;
+        System.out.println("[PHASE] Starting Training in level 0.");
+
+        while(keepPlaying && level_idx < trainingLevels.length)
+        {
+            String level_file = trainingLevels[level_idx];
+            for (int i = 0; keepPlaying && i < level_times; ++i) {
+                levelOutcome = playOneLevel(game_file,level_file,i,false, visual, recordActions,level_idx,
+                        players,actionFiles,toPlay,scores,victories);
+                keepPlaying = (levelOutcome>=0);
+            }
+            level_idx++;
+        }
+
+        if(levelOutcome == Types.LEARNING_RESULT_DISQ)
+            return;
+
+        if(levelOutcome != Types.LEARNING_FINISH_ROUND) {
+            //We only continue playing if the round is not over.
+            System.out.println("[PHASE] Starting Second Phase of Training in " + Types.NUM_TRAINING_LEVELS + " levels.");
+            while (levelOutcome >= 0) {
+                // Play the selected level once
+                levelOutcome = playOneLevel(game_file, level_files[0], 0, false, visual, recordActions,
+                        0, players, actionFiles, toPlay, scores, victories);
+            }
+        }
+
+
+        // TODO: 23/04/2018 below is the harder version, commented by Jialin
+        /*
+        level_idx = 0;
+        int levelOutcome = 0;
         System.out.println("[PHASE] Starting First Phase of Training in " + Types.NUM_TRAINING_LEVELS + " levels.");
         while(keepPlaying && level_idx < trainingLevels.length)
         {
@@ -172,7 +203,6 @@ public class LearningMachine {
             for (int i = 0; keepPlaying && i < level_times; ++i) {
                 levelOutcome = playOneLevel(game_file,level_file,i,false, visual, recordActions,level_idx,
                     players,actionFiles,toPlay,scores,victories);
-//                System.err.println("levelOutcome="+levelOutcome);
                 keepPlaying = (levelOutcome>=0);
             }
             level_idx++;
@@ -190,6 +220,8 @@ public class LearningMachine {
                     levelOutcome, players, actionFiles, toPlay, scores, victories);
             }
         }
+         */
+        // END the harder version
 
         if(levelOutcome == Types.LEARNING_RESULT_DISQ)
             return;
