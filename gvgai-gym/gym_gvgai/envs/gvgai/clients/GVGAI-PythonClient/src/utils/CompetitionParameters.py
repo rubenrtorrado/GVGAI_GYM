@@ -1,5 +1,5 @@
 import sys
-
+import numpy as np
 
 class CompetitionParameters:
     """
@@ -16,11 +16,11 @@ class CompetitionParameters:
 
     USE_SOCKETS = True
     START_TIME = 1000
-    INITIALIZATION_TIME = 1000
-    ACTION_TIME = 40
-    ACTION_TIME_DISQ = 50
+    INITIALIZATION_TIME =  1000
+    ACTION_TIME = np.inf #40
+    ACTION_TIME_DISQ = np.inf #50
     MILLIS_IN_MIN = 60*1000
-    TOTAL_LEARNING_TIME = 5*MILLIS_IN_MIN
-    EXTRA_LEARNING_TIME = 1000
+    TOTAL_LEARNING_TIME = np.inf #5*MILLIS_IN_MIN
+    EXTRA_LEARNING_TIME = np.inf #1000
     SOCKET_PORT = 8080
     SCREENSHOT_FILENAME = "gameStateByBytes.png"

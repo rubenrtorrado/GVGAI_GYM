@@ -59,7 +59,7 @@ class ClientCommGYM:
         self.startComm()
         
         #change that
-        for _ in range(3):
+        for _ in range(1):
             self.reset()
 
     def startComm(self):
@@ -165,7 +165,11 @@ class ClientCommGYM:
                     self.line = self.io.readLine()
                     self.line = self.line.rstrip("\r\n")
                     self.processLine(self.line)
-                    
+
+                #print(self.sso.phase)
+                #print(self.sso.isGameOver)
+                #print(dir(self.sso))
+
                 if(self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH" or self.sso.phase == "End"):
                     
                     self.sso.image = misc.imread('gameStateByBytes.png')
@@ -315,6 +319,7 @@ class ClientCommGYM:
         ect = ElapsedCpuTimer()
         ect.setMaxTimeMillis(CompetitionParameters.START_TIME)
         #self.startAgent()
+
         if ect.exceededMaxTime():
             self.io.writeToServer(self.lastMessageId, "START_FAILED", self.LOG)
         else:
@@ -327,6 +332,8 @@ class ClientCommGYM:
         #self.player.init(self.sso, ect.copy())
         #self.lastSsoType = self.player.lastSsoType
         self.lastSsoType = LEARNING_SSO_TYPE.IMAGE
+
+
         if ect.exceededMaxTime():
             self.io.writeToServer(self.lastMessageId, "INIT_FAILED", self.LOG)
         else:
@@ -345,6 +352,8 @@ class ClientCommGYM:
             action = "ACTION_NIL"
         #self.lastSsoType = self.player.lastSsoType
         self.lastSsoType = LEARNING_SSO_TYPE.IMAGE
+
+
         if ect.exceededMaxTime():
             if ect.elapsedNanos() > CompetitionParameters.ACTION_TIME_DISQ*1000000:
                 self.io.writeToServer(self.lastMessageId, "END_OVERSPENT", self.LOG)

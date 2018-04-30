@@ -12,38 +12,38 @@ public class CompetitionParameters
     /**
      * Milliseconds allowed per controller action.
      */
-    public static final int ACTION_TIME = 40;
+    public static final int ACTION_TIME = 400000;
 
     /**
      * Milliseconds for controller disqualification, if it returns an action after this time.
      */
-    public static final int ACTION_TIME_DISQ = 50;
+    public static final int ACTION_TIME_DISQ = 500000;
 
     /**
      * Milliseconds allowed for controller initialization.
      */
-    public static final int INITIALIZATION_TIME = 1000;
+    public static final int INITIALIZATION_TIME = 1000000;
 
     /**
      * Milliseconds allowed for controller tear down.
      */
-    public static final int TEAR_DOWN_TIME = 100;
+    public static final int TEAR_DOWN_TIME = 10000;
 
     /**
      * Milliseconds allowed for the level generator to generate a level
      */
     //public static final int LEVEL_ACTION_TIME = 1800000*10;
     //public static final int LEVEL_ACTION_TIME = 28800000;
-    public static final int LEVEL_ACTION_TIME = 3600000;
+    public static final int LEVEL_ACTION_TIME = Integer.MAX_VALUE;//36000000;
     /**
      * Milliseconds allowed for the level generator disqualification, if it returns a level after this time.
      */
-    public static final int LEVEL_ACTION_TIME_DISQ = 21600000;
+    public static final int LEVEL_ACTION_TIME_DISQ = 216000000;
     
     /**
      * Milliseconds allowed for level generator to initialize
      */
-    public static final int LEVEL_INITIALIZATION_TIME = 60000;
+    public static final int LEVEL_INITIALIZATION_TIME = 600000;
     
     /**
      * Milliseconds allowed for the rule generator to generate rules
@@ -58,7 +58,7 @@ public class CompetitionParameters
     /**
      * Milliseconds allowed for rule generator to initialize
      */
-    public static final int RULE_INITIALIZATION_TIME = 60000;
+    public static final int RULE_INITIALIZATION_TIME = 6000000;
     
     /**
      * Number of repetition during the optimization operation
@@ -123,7 +123,7 @@ public class CompetitionParameters
     /**
      * Max time a game can run
      */
-    public static final int MAX_TIMESTEPS = 2000;
+    public static final int MAX_TIMESTEPS = 200000000;
 
     /**
      * Terminates the program when the playing window is closed
