@@ -33,6 +33,7 @@ class GVGAI_Env(gym.Env):
 
         self.actions = self.GVGAI.actions()
         self.img = self.GVGAI.sso.image
+        self.viewer = None
        
         #Only allow gridphysics games for now
         #Get number of moves for a selected game
@@ -73,10 +74,26 @@ class GVGAI_Env(gym.Env):
         """
         return self.GVGAI.reset()
 
-    def render(self, mode='human', close=False):
-        #Add rendering capability
-        #If we add render, add close
-        return self.img
+    def render(self, mode='human'):
+        img = self.img[:,:,:3]
+        if mode == 'rgb_array':
+            return img
+        elif mode == 'human':
+            from gym.envs.classic_control import rendering
+            if self.viewer is None:
+                self.viewer = rendering.SimpleImageViewer()
+            self.viewer.imshow(img)
+            return self.viewer.isopen
+
+    def close(self):
+        if self.viewer is not None:
+            self.viewer.close()
+            self.viewer = None
+
+    # def render(self, mode='human', close=False):
+    #     #Add rendering capability
+    #     #If we add render, add close
+    #     return self.img
 
 
 def temp_game_id(name):
