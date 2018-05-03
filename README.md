@@ -23,6 +23,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/rubenr
 The gem is available as open source under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0).
 
 # GVGAI Single-Player Competition @CIG18
+
 The 2nd GVGAI Single-Player Competition will be organised at [the IEEE’s 2018 Conference on Computational Intelligence and Games (CIG18)](https://project.dke.maastrichtuniversity.nl/cig2018/?page_id=255).
 
 **Important notice: A new GVGAI-Gym will be used in this competition. The competition rules have been changed.**
@@ -33,7 +34,7 @@ Due to the long training time, the GVGAI server won’t be used for training you
 ### Preparation
 
 Download and set up the new GVGAI-Gym framework on your machine/server.
-GVGAI-Gym on GitHub: https://github.com/rubenrtorrado/GVGAI_GYM (master branch)
+
 Demo video on YouTube: https://youtu.be/O84KgRt6AJI
 
 ### Training Phase (NOW - 1 July 2018)
