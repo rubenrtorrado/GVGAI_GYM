@@ -3,6 +3,7 @@ import logging
 import sys
 import os
 import random
+import tempfile
 
 from scipy import misc
 
@@ -27,7 +28,7 @@ class ClientCommGYM:
     """
 
     def __init__(self, gameId, pathStr):
-        self.setInstanceDirectory()
+        self.cwd = self.setInstanceDirectory()
 
         self.TOKEN_SEP = '#'
         address = IOSocket.getOpenAddress()
@@ -363,9 +364,11 @@ class ClientCommGYM:
             self.io.writeToServer(self.lastMessageId, action + "#" + self.lastSsoType, self.LOG)
 
     def setInstanceDirectory(self):
-        name = 'run_{}'.format(os.getpid())
-        os.makedirs(name, exist_ok = True)
-        os.chdir(name)
+        #name = 'run_{}'.format(os.getpid())
+        #os.makedirs(name, exist_ok = True)
+        cwd = tempfile.TemporaryDirectory()
+        os.chdir(cwd.name)
+        return cwd
 
     # def updateJavaPort(self, pathStr, port):
     #     filePath = os.path.join(pathStr, 'gvgai', 'src', 'core', 'competition', 'CompetitionParameters.java')
