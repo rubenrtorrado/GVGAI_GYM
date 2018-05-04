@@ -15,10 +15,9 @@ Demo video on [YouTube](https://youtu.be/O84KgRt6AJI)
 
 Once installed, it can be used like any OpenAI Gym environment.
 
-Run the below code to get a list of all GVGAI environments.
+Run the following line to get a list of all GVGAI environments.
 ```Python
-from gym import envs
-envs = [env.id for env in envs.registry.all() if env.id.startswith('gvgai')]
+[env.id for env in gym.envs.registry.all() if env.id.startswith('gvgai')]
 ```
 
 ## Contributing
