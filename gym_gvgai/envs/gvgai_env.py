@@ -23,13 +23,13 @@ class GVGAI_Env(gym.Env):
     when the agent receives which reward.
     """
 
-    def __init__(self, game):
-        self.__version__ = "0.0.1"
+    def __init__(self, game, level, version):
+        self.__version__ = "0.0.2"
         print("GVGAI_Env - Version {}".format(self.__version__))
 
-        gameID = temp_game_id(game)
+        #gameID = temp_game_id(game)
         #Send the level to play
-        self.GVGAI = gvgai.ClientCommGYM(gameID, dir)
+        self.GVGAI = gvgai.ClientCommGYM(game, version, level, dir)
 
         self.actions = self.GVGAI.actions()
         self.img = self.GVGAI.sso.image

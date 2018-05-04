@@ -18,9 +18,7 @@ public class JavaServer {
 
     public static void main(String[] args) throws Exception {
         /** Init params */
-        //Phil
-        // String gameName = "aliens"
-        // String gameLvls = "{1}"
+        String game = "";
         int gameIdx = 0;
         int portNum = 8080;
         String clientType = "java"; //"python"; // Type of client to test against (Python/Java)
@@ -50,13 +48,9 @@ public class JavaServer {
             }
         }
         /** Update params */
-        //Phil
-        // if (params.containsKey("gameName")) {
-        //     gameName = params.get("gameName").get(0);
-        // }
-        // if (params.containsKey("gameLvls")) {
-        //     gameLvls = params.get("gameLvls").get(0);
-        // }
+        if (params.containsKey("game")) {
+            game = params.get("game").get(0);
+        }
         if (params.containsKey("portNum")) {
             portNum = Integer.parseInt(params.get("portNum").get(0));
         }
@@ -74,7 +68,7 @@ public class JavaServer {
         }
         if (params.containsKey("gamesDir")) {
             gamesDir = params.get("gamesDir").get(0);
-            IMG_PATH = gamesDir + "/" + IMG_PATH;
+            //IMG_PATH = gamesDir + "/" + IMG_PATH;
         }
         if (params.containsKey("imgDir")) {
             String imgDir = params.get("imgDir").get(0);
@@ -97,65 +91,54 @@ public class JavaServer {
 
 
         // Available games:
-        String gridGamesPath = gamesDir + "/examples/gridphysics/";
-        String contGamesPath = gamesDir + "/examples/contphysics/";
-        String gamesPath;
-        String games[];
-        boolean GRID_PHYSICS = true;
+        // String gridGamesPath = gamesDir + "/examples/gridphysics/";
+        // String contGamesPath = gamesDir + "/examples/contphysics/";
+        // String gamesPath;
+        // String games[];
+        // boolean GRID_PHYSICS = true;
 
 //        System.out.println("[LOG] Server asked to run at port: " + port + " where games are IN " + new File(gamesDir+ "/examples").getAbsolutePath());
 
         // All public games (gridphysics)
-        if(GRID_PHYSICS) {
-            gamesPath = gridGamesPath;
-            games = new String[]{"aliens", "angelsdemons", "assemblyline", "avoidgeorge", "bait", // 0-4
-                "beltmanager", "blacksmoke", "boloadventures", "bomber", "bomberman", // 5-9
-                "boulderchase", "boulderdash", "brainman", "butterflies", "cakybaky", // 10-14
-                "camelRace", "catapults", "chainreaction", "chase", "chipschallenge", // 15-19
-                "clusters", "colourescape", "chopper", "cookmepasta", "cops", // 20-24
-                "crossfire", "defem", "defender", "digdug", "dungeon", // 25-29
-                "eighthpassenger", "eggomania", "enemycitadel", "escape", "factorymanager", // 30-34
-                "firecaster", "fireman", "firestorms", "freeway", "frogs", // 35-39
-                "garbagecollector", "gymkhana", "hungrybirds", "iceandfire", "ikaruga", // 40-44
-                "infection", "intersection", "islands", "jaws", "killBillVol1", // 45-49
-                "labyrinth", "labyrinthdual", "lasers", "lasers2", "lemmings", // 50-54
-                "missilecommand", "modality", "overload", "pacman", "painter", // 55-59
-                "pokemon", "plants", "plaqueattack", "portals", "raceBet", // 60-64
-                "raceBet2", "realportals", "realsokoban", "rivers", "roadfighter", // 65-69
-                "roguelike", "run", "seaquest", "sheriff", "shipwreck", // 70-74
-                "sokoban", "solarfox", "superman", "surround", "survivezombies", // 75-79
-                "tercio", "thecitadel", "thesnowman", "waitforbreakfast", "watergame", // 80-84
-                "waves", "whackamole", "wildgunman", "witnessprotection", "wrapsokoban", // 85-89
-                "zelda", "zenpuzzle"}; // 90, 91
+        // if(GRID_PHYSICS) {
+        //     gamesPath = gridGamesPath;
+        //     games = new String[]{"aliens", "angelsdemons", "assemblyline", "avoidgeorge", "bait", // 0-4
+        //         "beltmanager", "blacksmoke", "boloadventures", "bomber", "bomberman", // 5-9
+        //         "boulderchase", "boulderdash", "brainman", "butterflies", "cakybaky", // 10-14
+        //         "camelRace", "catapults", "chainreaction", "chase", "chipschallenge", // 15-19
+        //         "clusters", "colourescape", "chopper", "cookmepasta", "cops", // 20-24
+        //         "crossfire", "defem", "defender", "digdug", "dungeon", // 25-29
+        //         "eighthpassenger", "eggomania", "enemycitadel", "escape", "factorymanager", // 30-34
+        //         "firecaster", "fireman", "firestorms", "freeway", "frogs", // 35-39
+        //         "garbagecollector", "gymkhana", "hungrybirds", "iceandfire", "ikaruga", // 40-44
+        //         "infection", "intersection", "islands", "jaws", "killBillVol1", // 45-49
+        //         "labyrinth", "labyrinthdual", "lasers", "lasers2", "lemmings", // 50-54
+        //         "missilecommand", "modality", "overload", "pacman", "painter", // 55-59
+        //         "pokemon", "plants", "plaqueattack", "portals", "raceBet", // 60-64
+        //         "raceBet2", "realportals", "realsokoban", "rivers", "roadfighter", // 65-69
+        //         "roguelike", "run", "seaquest", "sheriff", "shipwreck", // 70-74
+        //         "sokoban", "solarfox", "superman", "surround", "survivezombies", // 75-79
+        //         "tercio", "thecitadel", "thesnowman", "waitforbreakfast", "watergame", // 80-84
+        //         "waves", "whackamole", "wildgunman", "witnessprotection", "wrapsokoban", // 85-89
+        //         "zelda", "zenpuzzle"}; // 90, 91
 
-        }else{
-            gamesPath = contGamesPath;
-            games = new String[]{"artillery", "asteroids", "bird", "bubble", "candy",   //0 - 4
-                "lander", "mario", "pong", "ptsp", "racing"};                       //5 - 9
-        }
+        // }else{
+        //     gamesPath = contGamesPath;
+        //     games = new String[]{"artillery", "asteroids", "bird", "bubble", "candy",   //0 - 4
+        //         "lander", "mario", "pong", "ptsp", "racing"};                       //5 - 9
+        // }
 
 
 
         //Game and level to play
-        String game = gamesPath + games[gameIdx] + ".txt";
+        String game_file = gamesDir + "/" + game + ".txt";
         String[] level_files = new String[5];
         for (int i = 0; i <= 4; i++){
-            level_files[i] = gamesPath + games[gameIdx] + "_lvl" + i +".txt";
+            level_files[i] = gamesDir + "/" + game + "_lvl" + i +".txt";
         }
         // This plays a training round for a specified game.
-        System.out.println("[GAME] Game idx:" + gameIdx + " game name " + games[gameIdx]);
-        LearningMachine.runMultipleGames(game, level_files, cmd, new String[]{null}, visuals);
-
-        //New version with direct game call and levels
-        //Phil
-        // String game = gamesPath + gameName + "txt";
-        // //Convert gameLvls to array
-        // String[] level_files = new String[gameLvls.size()];
-        // for (String i : gameLvls){
-        //     level_files[i] = gamesPath + gameName + "_lvl" + i +".txt";
-        // }
-        // //Ruben's Agent needs to handle level settings
-        // LearningMachine.runMultipleGames(game, level_files, cmd, new String[]{null}, visuals);
+        System.out.println("[GAME] Game " + game);
+        LearningMachine.runMultipleGames(game_file, level_files, cmd, new String[]{null}, visuals);
 
 
         //Report total time spent.

@@ -27,7 +27,7 @@ class ClientCommGYM:
      * Client communication, set up the socket for a given agent
     """
 
-    def __init__(self, gameId, pathStr):
+    def __init__(self, game, version, lvl, pathStr):
         self.cwd = self.setInstanceDirectory()
 
         self.TOKEN_SEP = '#'
@@ -40,6 +40,7 @@ class ClientCommGYM:
         self.player = None
         self.global_ect = None
         self.lastSsoType = LEARNING_SSO_TYPE.JSON
+        self.level = lvl
         
         self.sso.Terminal=False
 
@@ -47,19 +48,19 @@ class ClientCommGYM:
         #agentName = 'gym.Agent'
         shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils').replace(' ', '\ ')
         visuals = False
-        gamesDir = os.path.join(pathStr, 'games').replace(' ', '\ ')
+        gamesDir = os.path.join(pathStr, 'games', '{}_v{}'.format(game,version)).replace(' ', '\ ')
         gameFile = ''
         levelFile = ''
         serverJar=''
 
         #sys.path.append(self.shDir)
         scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
-        scriptFile = scriptFile + " " + str(gameId) + " " +  str(serverDir) + " " + str(visuals) + " " + str(address[1])
+        scriptFile = scriptFile + " " + str(game) + " " +  str(serverDir) + " " + str(gamesDir) + " " + str(address[1])
         self.java = subprocess.Popen("exec " + scriptFile, shell=True)
 
         self.startComm()
         
-        #change that
+        #The framework chooses the first three levels, therefore we skip these
         for _ in range(1):
             self.reset()
 
@@ -105,7 +106,6 @@ class ClientCommGYM:
         return self.sso.image,Score, self.sso.Terminal
 
     def reset(self):
-
         #flag=True
         #self.line = ''
         self.lastScore=0
@@ -121,8 +121,7 @@ class ClientCommGYM:
             #self.processLine(self.line)
             
             if self.sso.Terminal:
-                nextLevel=0
-                self.io.writeToServer(self.lastMessageId, str(nextLevel) + "#" + self.lastSsoType, self.LOG)
+                self.io.writeToServer(self.lastMessageId, str(self.level) + "#" + self.lastSsoType, self.LOG)
             else:
             
                 self.io.writeToServer(self.lastMessageId, "END_OVERSPENT", self.LOG)
@@ -131,8 +130,7 @@ class ClientCommGYM:
                 self.line = self.line.rstrip("\r\n")
                 self.processLine(self.line)
             
-                nextLevel=0
-                self.io.writeToServer(self.lastMessageId, str(nextLevel) + "#" + self.lastSsoType, self.LOG)
+                self.io.writeToServer(self.lastMessageId, str(self.level) + "#" + self.lastSsoType, self.LOG)
 
         else:
             restart=True

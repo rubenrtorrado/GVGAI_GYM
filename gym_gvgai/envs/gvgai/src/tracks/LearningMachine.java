@@ -67,7 +67,8 @@ public class LearningMachine {
         LearningPlayer player = LearningMachine.createPlayer(cmd);
 
         // Play the training games.
-        runGames(game_file, level_files, 1, player, actionFiles, visuals);
+        //Playable levels somehow governed by Types.NUM_TRAINABLE_LEVELS (not in this file or LearningPlayer)
+        runGymGames(game_file, level_files, 1, player, actionFiles, visuals);
     }
 
     /**
@@ -108,6 +109,80 @@ public class LearningMachine {
         LearningMachine.tearPlayerDown(player, toPlay);
 
         return score;
+    }
+
+/**
+     * Reads and launches a game for a bot to be played. It specifies which levels to play and how many times.
+     * Filenames for saving actions can be specified. Graphics always on.
+     * @param game_file game description file.
+     * @param level_files array of level file names to play.
+     * @param level_times how many times each level has to be played.
+     * @param actionFiles names of the files where the actions of this player, for this game, should be recorded. Accepts
+     *                    null if no recording is desired. If not null, this array must contain as much String objects as
+     *                    level_files.length*level_times.
+     */
+    public static void runGymGames(String game_file, String[] level_files, int level_times,
+                                LearningPlayer player, String[] actionFiles, boolean visual) throws IOException {
+        VGDLFactory.GetInstance().init(); //This always first thing to do.
+        VGDLRegistry.GetInstance().init();
+        CompetitionParameters.IS_LEARNING = true;
+        boolean recordActions = false;
+        if (actionFiles != null) {
+            recordActions = true;
+            assert actionFiles.length >= level_files.length * level_times :
+                "runGames (actionFiles.length<level_files.length*level_times): " +
+                    "you must supply an action file for each game instance to be played, or null.";
+        }
+
+        Game toPlay = new VGDLParser().parseGame(game_file);
+        int levelOutcome = 0;
+
+
+        StatSummary[] victories = new StatSummary[toPlay.getNoPlayers()];
+        StatSummary[] scores = new StatSummary[toPlay.getNoPlayers()];
+        victories[0] = new StatSummary();
+        scores[0] = new StatSummary();
+        performance = new StatSummary();
+
+        // Player array to hold the single player
+        LearningPlayer[] players = new LearningPlayer[]{player};
+
+        // Initialize the player
+        boolean initSuccesful = players[0].startPlayerCommunication();
+        if (!initSuccesful) {
+            return;
+        }
+
+        if(levelOutcome != Types.LEARNING_FINISH_ROUND) {
+            //We only continue playing if the round is not over.
+            System.out.println("[PHASE] Start training on selected levels.");
+            while (levelOutcome >= 0) {
+                // Play the selected level once
+                levelOutcome = playOneLevel(game_file, level_files[levelOutcome], 0, false, visual, recordActions,
+                    levelOutcome, players, actionFiles, toPlay, scores, victories);
+            }
+        }
+
+        if(levelOutcome == Types.LEARNING_RESULT_DISQ)
+            return;
+        
+        System.out.println("[PHASE] End Training.");
+        String vict = "", sc = "";
+        for (int i = 0; i < toPlay.no_players; i++) {
+            vict += victories[i].mean();
+            sc += scores[i].mean();
+            if (i != toPlay.no_players - 1) {
+                vict += ", ";
+                sc += ", ";
+            }
+        }
+
+
+//        System.out.println("[LOG] Results in game " + game_file + ", " +
+//                vict + " , " + sc);
+
+        //Finally, when the game is over, we need to finish the communication with the client.
+        player.finishPlayerCommunication();
     }
 
 
@@ -224,6 +299,8 @@ public class LearningMachine {
                 sc += ", ";
             }
         }
+
+
 
 //        System.out.println("[LOG] Results in game " + game_file + ", " +
 //                vict + " , " + sc);
