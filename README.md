@@ -4,15 +4,22 @@ An [OpenAI Gym](gym.openai.com) environment for games written in the [Video Game
 
 ## Installation
 
-- Follow the installation instructions for the OpenAI Gym from its [repository](https://github.com/openai/gym)
+- Clone this repository to your local machine.
+- To install the package, run `pip install -e <package-location>`
+  (This should install OpenAI Gym automatically, otherwise it can be installed [here](https://github.com/openai/gym)
 - Install a Java compiler `javac` (e.g. `sudo apt install openjdk-9-jdk-headless`)
-- Install `pillow` through `pip`: `pip install pillow`
-- To run the iPython notebooks you will also need to `pip install jupyter baseline`, then in the `gvgai-gym` folder call `jupyter notebook` from the shell.
 
 ## Usage
-Demo video on YouTube: https://youtu.be/O84KgRt6AJI
 
-TODO: Write usage instructions here
+Demo video on [YouTube](https://youtu.be/O84KgRt6AJI)
+
+Once installed, it can be used like any OpenAI Gym environment.
+
+Run the below code to get a list of all GVGAI environments.
+```Python
+from gym import envs
+envs = [env.id for env in envs.registry.all() if env.id.startswith('gvgai')]
+```
 
 ## Contributing
 
@@ -20,7 +27,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/rubenr
 
 ## License
 
-The gem is available as open source under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0).
+This code is available as open source under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0).
 
 # GVGAI Single-Player Competition @CIG18
 
@@ -35,7 +42,7 @@ Due to the long training time, the GVGAI server won’t be used for training you
 
 Download and set up the new GVGAI-Gym framework on your machine/server.
 
-Demo video on YouTube: https://youtu.be/O84KgRt6AJI
+Demo video on [YouTube](https://youtu.be/O84KgRt6AJI)
 
 ### Training Phase (NOW - 1 July 2018)
 
