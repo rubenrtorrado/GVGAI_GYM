@@ -4,12 +4,12 @@
 """
 Simulate VGDL Games
 """
-import os
 import sys
+from os import path
 import numpy as np
 
-dir = os.path.dirname(__file__)
-gvgai_path = os.path.join(dir, "gvgai", "clients", "GVGAI-PythonClient", "src", "utils")
+dir = path.dirname(__file__)
+gvgai_path = path.join(dir, "gvgai", "clients", "GVGAI-PythonClient", "src", "utils")
 sys.path.append(gvgai_path)
 
 import gym
@@ -25,11 +25,13 @@ class GVGAI_Env(gym.Env):
 
     def __init__(self, game, level, version):
         self.__version__ = "0.0.2"
-        print("GVGAI_Env - Version {}".format(self.__version__))
+        metadata = {'render.modes': ['human', 'rgb_array']}
 
-        #gameID = temp_game_id(game)
         #Send the level to play
         self.GVGAI = gvgai.ClientCommGYM(game, version, level, dir)
+        self.game = game
+        self.lvl = level
+        self.version = version
 
         self.actions = self.GVGAI.actions()
         self.img = self.GVGAI.sso.image
@@ -72,7 +74,7 @@ class GVGAI_Env(gym.Env):
         -------
         observation (object): the initial observation of the space.
         """
-        return self.GVGAI.reset()
+        return self.GVGAI.reset(self.lvl)
 
     def render(self, mode='human'):
         img = self.img[:,:,:3]
@@ -90,34 +92,27 @@ class GVGAI_Env(gym.Env):
             self.viewer.close()
             self.viewer = None
 
-    # def render(self, mode='human', close=False):
-    #     #Add rendering capability
-    #     #If we add render, add close
-    #     return self.img
+    #Expects path string or int value
+    def _setLevel(self, path):
+        if(type(path) == int):
+            if(path < 5):
+                self.lvl = path
+            else:
+                print("Level doesn't exist, playing level 0")
+                self.lvl = 0
+        else:
+            newLvl = path.realpath(path)
+            handLvls = [path.realpath(path.join(dir, 'games', '{}_v{}'.format(self.game, self.version), '{}_lvl{}.txt'.format(self.game, i))) for i in range(5)]
+            if(newLvl in handLvls):
+                lvl = handLvls.index(newLvl)
+                self.lvl = lvl
+            elif(path.exists(newLvl)):
+                #Copy path
+                self.lvl = 5
+            else:
+                print("Level doesn't exist, playing level 0")
+                self.lvl = 0
 
-
-def temp_game_id(name):
-    #Move games out of examples folder
-    games = ["aliens", "angelsdemons", "assemblyline", "avoidgeorge", "bait",
-                "beltmanager", "blacksmoke", "boloadventures", "bomber", "bomberman",
-                "boulderchase", "boulderdash", "brainman", "butterflies", "cakybaky",
-                "camelRace", "catapults", "chainreaction", "chase", "chipschallenge",
-                "clusters", "colourescape", "chopper", "cookmepasta", "cops",
-                "crossfire", "defem", "defender", "digdug", "dungeon",
-                "eighthpassenger", "eggomania", "enemycitadel", "escape", "factorymanager",
-                "firecaster", "fireman", "firestorms", "freeway", "frogs",
-                "garbagecollector", "gymkhana", "hungrybirds", "iceandfire", "ikaruga",
-                "infection", "intersection", "islands", "jaws", "killBillVol1",
-                "labyrinth", "labyrinthdual", "lasers", "lasers2", "lemmings",
-                "missilecommand", "modality", "overload", "pacman", "painter",
-                "pokemon", "plants", "plaqueattack", "portals", "raceBet",
-                "raceBet2", "realportals", "realsokoban", "rivers", "roadfighter",
-                "roguelike", "run", "seaquest", "sheriff", "shipwreck", 
-                "sokoban", "solarfox", "superman", "surround", "survivezombies",
-                "tercio", "thecitadel", "thesnowman", "waitforbreakfast", "watergame",
-                "waves", "whackamole", "wildgunman", "witnessprotection", "wrapsokoban",
-                "zelda", "zenpuzzle"]
-    return games.index(name)
 
 ACTION_MEANING = {
     0 : "NOOP",

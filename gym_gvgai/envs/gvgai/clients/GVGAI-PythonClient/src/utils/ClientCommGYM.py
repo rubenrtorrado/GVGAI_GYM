@@ -40,7 +40,6 @@ class ClientCommGYM:
         self.player = None
         self.global_ect = None
         self.lastSsoType = LEARNING_SSO_TYPE.JSON
-        self.level = lvl
         
         self.sso.Terminal=False
 
@@ -48,7 +47,7 @@ class ClientCommGYM:
         #agentName = 'gym.Agent'
         shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils').replace(' ', '\ ')
         visuals = False
-        gamesDir = os.path.join(pathStr, 'games', '{}_v{}'.format(game,version)).replace(' ', '\ ')
+        gamesDir = os.path.join(pathStr, 'games', '{}_v{}'.format(game, version)).replace(' ', '\ ')
         gameFile = ''
         levelFile = ''
         serverJar=''
@@ -60,9 +59,7 @@ class ClientCommGYM:
 
         self.startComm()
         
-        #The framework chooses the first three levels, therefore we skip these
-        for _ in range(1):
-            self.reset()
+        self.reset(lvl)
 
     def startComm(self):
         self.io.initBuffers()
@@ -105,7 +102,7 @@ class ClientCommGYM:
         
         return self.sso.image,Score, self.sso.Terminal
 
-    def reset(self):
+    def reset(self, lvl):
         #flag=True
         #self.line = ''
         self.lastScore=0
@@ -121,7 +118,7 @@ class ClientCommGYM:
             #self.processLine(self.line)
             
             if self.sso.Terminal:
-                self.io.writeToServer(self.lastMessageId, str(self.level) + "#" + self.lastSsoType, self.LOG)
+                self.io.writeToServer(self.lastMessageId, str(lvl) + "#" + self.lastSsoType, self.LOG)
             else:
             
                 self.io.writeToServer(self.lastMessageId, "END_OVERSPENT", self.LOG)
@@ -130,7 +127,7 @@ class ClientCommGYM:
                 self.line = self.line.rstrip("\r\n")
                 self.processLine(self.line)
             
-                self.io.writeToServer(self.lastMessageId, str(self.level) + "#" + self.lastSsoType, self.LOG)
+                self.io.writeToServer(self.lastMessageId, str(lvl) + "#" + self.lastSsoType, self.LOG)
 
         else:
             restart=True
