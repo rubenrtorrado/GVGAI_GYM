@@ -76,13 +76,15 @@ public abstract class Comm extends Thread {
                 return Types.LEARNING_RESULT_DISQ;
             }
 
-            if (response.matches("^[0-" + Types.NUM_TRAINING_LEVELS + "]$")) {
-                return Integer.parseInt(response);
-            }else if (response.equals("END_TRAINING") || response.equals("END_VALIDATION")) {
-                return Types.LEARNING_FINISH_ROUND;
-            } else {
-                return new Random().nextInt(Types.NUM_TRAINING_LEVELS);
-            }
+            return Integer.parseInt(response);
+
+            // if (response.matches("^[0-" + Types.NUM_TRAINING_LEVELS + "]$")) {
+            //     return Integer.parseInt(response);
+            // }else if (response.equals("END_TRAINING") || response.equals("END_VALIDATION")) {
+            //     return Types.LEARNING_FINISH_ROUND;
+            // } else {
+            //     return new Random().nextInt(Types.NUM_TRAINING_LEVELS);
+            // }
 
 
         }catch(Exception e){

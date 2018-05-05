@@ -132,10 +132,11 @@ public class JavaServer {
 
         //Game and level to play
         String game_file = gamesDir + "/" + game + ".txt";
-        String[] level_files = new String[5];
+        String[] level_files = new String[6];
         for (int i = 0; i <= 4; i++){
             level_files[i] = gamesDir + "/" + game + "_lvl" + i +".txt";
         }
+        level_files[5] = "game_lvl5.txt";
         // This plays a training round for a specified game.
         System.out.println("[GAME] Game " + game);
         LearningMachine.runMultipleGames(game_file, level_files, cmd, new String[]{null}, visuals);

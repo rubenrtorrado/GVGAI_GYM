@@ -45,8 +45,8 @@ public class Types {
     public static final Direction DDOWN = new Direction(0, 1);
     public static final Direction[] DBASEDIRS = new Direction[]{DUP, DLEFT, DDOWN, DRIGHT};
 
-    public static final int NUM_LEARNING_LEVELS = 5;
-    public static final int NUM_TRAINING_LEVELS = 5; //NUM_EVALUATION = NUM_LEARNING_LEVELS - NUM_TRAINING_LEVELS
+    public static final int NUM_LEARNING_LEVELS = 6;
+    public static final int NUM_TRAINING_LEVELS = 6; //NUM_EVALUATION = NUM_LEARNING_LEVELS - NUM_TRAINING_LEVELS
     public static final int LEARNING_RESULT_DISQ = -1;
     public static final int LEARNING_FINISH_ROUND = -2;
 

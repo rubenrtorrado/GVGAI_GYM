@@ -13,16 +13,16 @@ class IOSocket:
      * Socket for communication
     """
 
-    def __init__(self, address):
+    def __init__(self, tmpDir):
         self.BUFF_SIZE = 8192
         self.END = '\n'
         self.TOKEN_SEP = '#'
-        self.hostname, self.port = address
+        self.hostname, self.port = self.getOpenAddress()
         self.connected = False
         self.socket = None
-        self.logfilename = os.path.normpath("./logs/clientLog.txt")
+        self.logfilename = os.path.normpath(os.path.join(tmpDir, "logs", "clientLog.txt"))
 
-        os.makedirs('logs', exist_ok=True)
+        os.makedirs(os.path.join(tmpDir, 'logs'), exist_ok=True)
         self.logfile = open(self.logfilename, "a")
 
     def initBuffers(self):
@@ -71,7 +71,7 @@ class IOSocket:
     def shutDown(self):
         self.socket.shutdown(0)
 
-    def getOpenAddress():
+    def getOpenAddress(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(("localhost",0))
         address = s.getsockname()

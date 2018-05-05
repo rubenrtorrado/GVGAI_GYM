@@ -61,11 +61,12 @@ class GVGAI_Env(gym.Env):
                 whether it's time to reset the environment again.
             info (dict):
                 info that can be added for debugging
+                info["winning"] == PLAYER_LOSES, PLAYER_WINS, NO_WINNER
         """
-        state, reward, isOver = self.GVGAI.step(action)
+        state, reward, isOver, info = self.GVGAI.step(action)
         
         self.img = state
-        return state, reward, isOver, {}
+        return state, reward, isOver, info
 
     def reset(self):
         """
@@ -93,21 +94,21 @@ class GVGAI_Env(gym.Env):
             self.viewer = None
 
     #Expects path string or int value
-    def _setLevel(self, path):
-        if(type(path) == int):
-            if(path < 5):
-                self.lvl = path
+    def _setLevel(self, level):
+        if(type(level) == int):
+            if(level < 5):
+                self.lvl = level
             else:
                 print("Level doesn't exist, playing level 0")
                 self.lvl = 0
         else:
-            newLvl = path.realpath(path)
-            handLvls = [path.realpath(path.join(dir, 'games', '{}_v{}'.format(self.game, self.version), '{}_lvl{}.txt'.format(self.game, i))) for i in range(5)]
-            if(newLvl in handLvls):
-                lvl = handLvls.index(newLvl)
+            newLvl = path.realpath(level)
+            ogLvls = [path.realpath(path.join(dir, 'games', '{}_v{}'.format(self.game, self.version), '{}_lvl{}.txt'.format(self.game, i))) for i in range(5)]
+            if(newLvl in ogLvls):
+                lvl = ogLvls.index(newLvl)
                 self.lvl = lvl
             elif(path.exists(newLvl)):
-                #Copy path
+                self.GVGAI.addLevel(newLvl)
                 self.lvl = 5
             else:
                 print("Level doesn't exist, playing level 0")

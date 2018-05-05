@@ -4,6 +4,7 @@ import sys
 import os
 import random
 import tempfile
+import shutil
 
 from scipy import misc
 
@@ -28,11 +29,11 @@ class ClientCommGYM:
     """
 
     def __init__(self, game, version, lvl, pathStr):
-        self.cwd = self.setInstanceDirectory()
+        self.tempDir = tempfile.TemporaryDirectory()
+        self.addLevel('')   #Level template to be loaded into java
 
         self.TOKEN_SEP = '#'
-        address = IOSocket.getOpenAddress()
-        self.io = IOSocket(address)
+        self.io = IOSocket(self.tempDir.name)
         self.sso = SerializableStateObservation()
         #self.agentName = agentName
         self.lastMessageId = 0
@@ -54,8 +55,8 @@ class ClientCommGYM:
 
         #sys.path.append(self.shDir)
         scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
-        scriptFile = scriptFile + " " + str(game) + " " +  str(serverDir) + " " + str(gamesDir) + " " + str(address[1])
-        self.java = subprocess.Popen("exec " + scriptFile, shell=True)
+        scriptFile = scriptFile + " " + str(game) + " " +  str(serverDir) + " " + str(gamesDir) + " " + str(self.io.port)
+        self.java = subprocess.Popen("exec " + scriptFile, shell=True, cwd=self.tempDir.name)
 
         self.startComm()
         
@@ -90,7 +91,7 @@ class ClientCommGYM:
             Score=0
         
         if self.sso.isGameOver==True or self.sso.gameWinner=='PLAYER_WINS' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT" or self.sso.phase=="End":
-            self.sso.image = misc.imread('gameStateByBytes.png')
+            self.sso.image = misc.imread(os.path.join(self.tempDir.name, 'gameStateByBytes.png'))
             self.sso.Terminal=True
             #self.lastScore=0
             #Score = self.lastScore
@@ -99,8 +100,8 @@ class ClientCommGYM:
             self.sso.Terminal=False
         
       
-        
-        return self.sso.image,Score, self.sso.Terminal
+        info = {'winner': self.sso.gameWinner}  
+        return self.sso.image,Score, self.sso.Terminal, info
 
     def reset(self, lvl):
         #flag=True
@@ -168,7 +169,7 @@ class ClientCommGYM:
 
                 if(self.sso.isGameOver==True or self.sso.gameWinner=='WINNER' or self.sso.phase == "FINISH" or self.sso.phase == "End"):
                     
-                    self.sso.image = misc.imread('gameStateByBytes.png')
+                    self.sso.image = misc.imread(os.path.join(self.tempDir.name, 'gameStateByBytes.png'))
                     self.sso.Terminal=True
                     self.lastScore=0
                 else:
@@ -358,26 +359,12 @@ class ClientCommGYM:
         else:
             self.io.writeToServer(self.lastMessageId, action + "#" + self.lastSsoType, self.LOG)
 
-    def setInstanceDirectory(self):
-        #name = 'run_{}'.format(os.getpid())
-        #os.makedirs(name, exist_ok = True)
-        cwd = tempfile.TemporaryDirectory()
-        os.chdir(cwd.name)
-        return cwd
-
-    # def updateJavaPort(self, pathStr, port):
-    #     filePath = os.path.join(pathStr, 'gvgai', 'src', 'core', 'competition', 'CompetitionParameters.java')
-    #     key = 'SOCKET_PORT = '
-
-    #     with open(filePath, 'r') as file:
-    #         dataString = file.read()
-
-    #     portIdx = dataString.index(key) + len(key)
-    #     endPortIdx = dataString.index(';', portIdx)
-    #     newString = dataString[:portIdx] + str(port) + dataString[endPortIdx:]
-
-    #     with open('filePath', 'w') as file:
-    #         file.write(newString)
+    def addLevel(self, path):
+        lvlName = os.path.join(self.tempDir.name, 'game_lvl5.txt')
+        if(path is ''):
+            open(lvlName, 'w+').close()
+        else:
+            shutil.copyfile(path, lvlName)
 
     def __del__(self):
         try:
