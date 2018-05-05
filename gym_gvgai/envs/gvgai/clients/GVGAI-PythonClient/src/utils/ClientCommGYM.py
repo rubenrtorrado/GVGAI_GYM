@@ -297,8 +297,8 @@ class ClientCommGYM:
                 if(self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == "IMAGE" \
                         or self.lastSsoType == LEARNING_SSO_TYPE.BOTH or self.lastSsoType == "BOTH"):
                     if(self.sso.imageArray):
-                        self.sso.convertBytesToPng(self.sso.imageArray)
-                        self.sso.image = misc.imread('gameStateByBytes.png')
+                        self.sso.convertBytesToPng(self.sso.imageArray, self.tempDir.name)
+                        self.sso.image = misc.imread(os.path.join(self.tempDir.name, 'gameStateByBytes.png'))
 
         except Exception as e:
             logging.exception(e)

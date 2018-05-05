@@ -4,6 +4,7 @@ from Types import WINNER as WINNER
 from Types import ACTIONS as ACTIONS
 from CompetitionParameters import CompetitionParameters as CompetitionParameters
 from PIL import Image
+from os import path
 import io
 
 
@@ -53,11 +54,11 @@ class SerializableStateObservation:
         self.portalsPositions = []
         self.fromAvatarSpritesPositions = []
 
-    def convertBytesToPng(self, pixels):
+    def convertBytesToPng(self, pixels, loc):
         for i, e in enumerate(pixels):
             pixels[i] = e & 0xFF
         image = Image.open(io.BytesIO(bytearray(pixels)))
-        image.save(CompetitionParameters.SCREENSHOT_FILENAME)
+        image.save(path.join(loc, CompetitionParameters.SCREENSHOT_FILENAME))
 
 
 class Phase:
