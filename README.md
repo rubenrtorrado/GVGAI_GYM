@@ -83,7 +83,7 @@ At this phase, your agent should return a legal action in **no more than 100ms p
 
 ## Resources
 
-[GVGAI website](www.gvgai.net)
+[GVGAI website](http://www.gvgai.net)
 
 [GVGAI-Gym (master branch)](https://github.com/rubenrtorrado/GVGAI_GYM) 
 
