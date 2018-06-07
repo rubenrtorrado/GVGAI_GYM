@@ -47,17 +47,17 @@ class ClientCommGYM:
         #Check build version
         sys.path.append(os.path.join(pathStr, 'gvgai'))
         import check_build
-        if(not check_build.isCorrectBuild(srcDir, buildDir)):
-            raise Exception("Your build is out of date. Please run build.py from the install directory or reinstall with pip.")
 
-        if(os.path.isdir(buildDir)):
+        if(not os.path.isdir(buildDir)):
+            raise Exception("Couldn't find build directory. Please run build.py from the install directory or reinstall with pip.")
+        elif(not check_build.isCorrectBuild(srcDir, buildDir)):
+            raise Exception("Your build is out of date. Please run build.py from the install directory or reinstall with pip.")
+        else:
             try:
                 self.java = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, cwd=self.tempDir.name)
             except subprocess.CalledProcessError as e:
                 print('exit code: {}'.format(e.returncode))
                 print('stderr: {}'.format(e.stderr.decode(sys.getfilesystemencoding())))
-        else:
-            raise Exception("Couldn't find build directory. Please run build.py from the install directory or reinstall with pip.")
 
         self.startComm()
         self.reset(lvl)
