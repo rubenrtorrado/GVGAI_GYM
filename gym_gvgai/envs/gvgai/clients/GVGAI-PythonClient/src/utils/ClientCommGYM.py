@@ -39,13 +39,14 @@ class ClientCommGYM:
         
         self.sso.Terminal=False
 
-        srcDir = os.path.join(pathStr, 'gvgai', 'src')
-        buildDir = os.path.join(pathStr, 'gvgai', 'GVGAI_Build')
+        baseDir = os.path.join(pathStr, 'gvgai')
+        srcDir = os.path.join(baseDir, 'src')
+        buildDir = os.path.join(baseDir, 'GVGAI_Build')
         gamesDir = os.path.join(pathStr, 'games', '{}_v{}'.format(game, version))
-        cmd = ["java", "-classpath", buildDir, "tracks.singleLearning.utils.JavaServer", "-game", game, "-gamesDir", gamesDir, "-portNum", str(self.io.port)]
+        cmd = ["java", "-classpath", buildDir, "tracks.singleLearning.utils.JavaServer", "-game", game, "-gamesDir", gamesDir, "-imgDir", baseDir, "-portNum", str(self.io.port)]
 
         #Check build version
-        sys.path.append(os.path.join(pathStr, 'gvgai'))
+        sys.path.append(baseDir)
         import check_build
 
         if(not os.path.isdir(buildDir)):
