@@ -31,6 +31,7 @@ def main(dir):
 			path = os.path.join(dir, dest)
 			if(os.path.isdir(path)):
 				shutil.rmtree(path)
+			os.makedirs(path, exist_ok=True)
 
 			#Build Java files
 			src_path = os.path.join(dir, "src")
