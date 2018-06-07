@@ -129,7 +129,6 @@ public class JavaServer {
         // }
 
 
-
         //Game and level to play
         String game_file = gamesDir + "/" + game + ".txt";
         String[] level_files = new String[6];

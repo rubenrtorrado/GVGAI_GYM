@@ -121,6 +121,7 @@ venv.bak/
 ########
 
 # Compiled class file
+**/gvgai/GVGAI_Build/
 *.class
 
 # Log file
@@ -198,8 +199,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-*****
-*Mac*
-*****
+#####
+#Mac#
+#####
 
 .DS_Store

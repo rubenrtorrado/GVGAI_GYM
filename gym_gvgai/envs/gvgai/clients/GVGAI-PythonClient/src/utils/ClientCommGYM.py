@@ -11,15 +11,10 @@ from scipy import misc
 import subprocess
 import argparse
 
-#from utils.SerializableStateObservation import SerializableStateObservation, Phase, Observation
 from SerializableStateObservation import SerializableStateObservation, Phase, Observation
-#sys.path.append(os.path.dirname(os.path.realpath(__file__))+'/..')
-#sys.path.append('../sampleRandom')
-
 from CompetitionParameters import CompetitionParameters
 from ElapsedCpuTimer import ElapsedCpuTimer
 from IOSocket import IOSocket
-#from utils.Types import LEARNING_SSO_TYPE
 from Types import LEARNING_SSO_TYPE
 
 
@@ -44,22 +39,27 @@ class ClientCommGYM:
         
         self.sso.Terminal=False
 
-        serverDir = os.path.join(pathStr, 'gvgai').replace(' ', '\ ')
-        #agentName = 'gym.Agent'
-        shDir = os.path.join(pathStr, 'gvgai', 'clients', 'GVGAI-PythonClient', 'src', 'utils').replace(' ', '\ ')
-        visuals = False
-        gamesDir = os.path.join(pathStr, 'games', '{}_v{}'.format(game, version)).replace(' ', '\ ')
-        gameFile = ''
-        levelFile = ''
-        serverJar=''
+        srcDir = os.path.join(pathStr, 'gvgai', 'src')
+        buildDir = os.path.join(pathStr, 'gvgai', 'GVGAI_Build')
+        gamesDir = os.path.join(pathStr, 'games', '{}_v{}'.format(game, version))
+        cmd = ["java", "-classpath", buildDir, "tracks.singleLearning.utils.JavaServer", "-game", game, "-gamesDir", gamesDir, "-portNum", str(self.io.port)]
 
-        #sys.path.append(self.shDir)
-        scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh")
-        scriptFile = scriptFile + " " + str(game) + " " +  str(serverDir) + " " + str(gamesDir) + " " + str(self.io.port)
-        self.java = subprocess.Popen("exec " + scriptFile, shell=True, cwd=self.tempDir.name)
+        #Check build version
+        sys.path.append(os.path.join(pathStr, 'gvgai'))
+        import check_build
+        if(not check_build.isCorrectBuild(srcDir, buildDir)):
+            raise Exception("Your build is out of date. Please run build.py from the install directory or reinstall with pip.")
+
+        if(os.path.isdir(buildDir)):
+            try:
+                self.java = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, cwd=self.tempDir.name)
+            except subprocess.CalledProcessError as e:
+                print('exit code: {}'.format(e.returncode))
+                print('stderr: {}'.format(e.stderr.decode(sys.getfilesystemencoding())))
+        else:
+            raise Exception("Couldn't find build directory. Please run build.py from the install directory or reinstall with pip.")
 
         self.startComm()
-        
         self.reset(lvl)
 
     def startComm(self):
