@@ -114,12 +114,5 @@ class GVGAI_Env(gym.Env):
                 print("Level doesn't exist, playing level 0")
                 self.lvl = 0
 
-
-ACTION_MEANING = {
-    0 : "NOOP",
-    1 : "FIRE",
-    2 : "UP",
-    3 : "RIGHT",
-    4 : "LEFT",
-    5 : "DOWN",
-}
+    def get_action_meanings(self):
+        return self.actions
