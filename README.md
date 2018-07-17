@@ -55,6 +55,11 @@ Program your agent and train it
 - On 2 July 2018, we will release 3 games (G1, G2 and G3) and 2 levels each for training. Unknown levels of the same 3 games will be used for validation. 
 - Train your agent on the given levels of given games using as much time as you want.
 
+**The released game are named as:**
+- testgame1
+- testgame2
+- testgame3
+
 ### Submission
 
 - Zip your trained agent.
@@ -75,10 +80,10 @@ At this phase, your agent should return a legal action in **no more than 100ms p
 
 ## Timeline
 
-- Release games for competition: 2 July 2018
-- Submission deadline: 22 July 2018 23:59 (GMT)
-- Testing on server: 23-27 July 2018 23:59 (GMT)
-- Starting validation on server: 28 July 2018
+- Release games for competition: ~~2 July 2018~~ Released on 4 July 2018
+- Submission deadline: ~~22 July 2018 23:59 (GMT)~~ 29 July 2018 23:59 (GMT)
+- Testing on server: ~~23-27 July 2018 23:59 (GMT)~~ 30 July-3 August 2018 23:59 (GMT)
+- Starting validation on server: ~~28 July 2018~~ 4 August 2018
 - Announcement of results: during the CIG18
 
 ## Resources
