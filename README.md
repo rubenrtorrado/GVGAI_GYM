@@ -1,6 +1,6 @@
 # GVGAI GYM
 
-An [OpenAI Gym](gym.openai.com) environment for games written in the [Video Game Description Language](http://www.gvgai.net/vgdl.php), including the [Generic Video Game Competition](http://www.gvgai.net/) framework.
+An [OpenAI Gym](gym.openai.com) environment for games written in the [Video Game Description Language](http://www.gvgai.net/vgdl.php), including the [Generic Video Game Competition](http://www.gvgai.net/) framework. The framework, along with some initial reinforcement learning results, is covered in the paper [Deep Reinforcement Learning for General Video Game AI](https://arxiv.org/abs/1806.02448).
 
 ## Installation
 
@@ -32,7 +32,7 @@ This code is available as open source under the terms of the [Apache License 2.0
 
 The 2nd GVGAI Single-Player Competition will be organised at [the IEEE’s 2018 Conference on Computational Intelligence and Games (CIG18)](https://project.dke.maastrichtuniversity.nl/cig2018/?page_id=255).
 
-**Important notice: A new GVGAI-Gym will be used in this competition. The competition rules have been changed.**
+**Important notice: A new GVGAI-Gym will be used in this competition from last year. The competition rules have been changed.**
 
 ## Rules
 Due to the long training time, the GVGAI server won’t be used for training your agent. Please train your agent using your own machine or server.
@@ -75,7 +75,7 @@ Program your agent and train it
 
 ### Validation Phase
 
-Your agent will play multiple time the same games (G1, G2 and G3) that we have released for training, but on private levels.
+Your agent will play the same games (G1, G2 and G3) that we have released for training, multiple times, but on private levels.
 At this phase, your agent should return a legal action in **no more than 100ms per game tick**.
 
 ## Timeline
