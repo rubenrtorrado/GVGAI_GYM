@@ -75,7 +75,8 @@ class GVGAI_Env(gym.Env):
         -------
         observation (object): the initial observation of the space.
         """
-        return self.GVGAI.reset(self.lvl)
+        self.img =  self.GVGAI.reset(self.lvl)
+        return self.img
 
     def render(self, mode='human'):
         img = self.img[:,:,:3]

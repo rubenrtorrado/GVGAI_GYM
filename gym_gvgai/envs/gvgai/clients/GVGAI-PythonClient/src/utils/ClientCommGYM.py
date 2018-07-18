@@ -65,6 +65,9 @@ class ClientCommGYM:
 
     def startComm(self):
         self.io.initBuffers()
+        #Reset currently sends initial commucations (which can't handle levels) and then resets
+        #This should be split into two functions after the competition (July 18, 2018)
+        self.reset(0)
 
     """
      * Method that perpetually listens for messages from the server.
