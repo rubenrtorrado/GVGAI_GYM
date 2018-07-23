@@ -43,16 +43,16 @@ Download and set up the new GVGAI-Gym framework on your machine/server.
 
 Demo video on [YouTube](https://youtu.be/O84KgRt6AJI)
 
-### Training Phase (NOW - 1 July 2018)
+### Training Phase (NOW - 3 July 2018)
 
 Program your agent and train it 
 - on as many games/levels as you want;
 - using as much time as you want for deciding an action per game tick;
 - using as much time as you want for training.
 
-### Validation Phase (2 - 22 July 2018)
+### Validation Phase (4 - 29 July 2018)
 
-- On 2 July 2018, we will release 3 games (G1, G2 and G3) and 2 levels each for training. Unknown levels of the same 3 games will be used for validation. 
+- On 4 July 2018, we will release 3 games (G1, G2 and G3) and 2 levels each for training. Unknown levels of the same 3 games will be used for validation. 
 - Train your agent on the given levels of given games using as much time as you want.
 
 **The released game are named as:**
@@ -64,13 +64,13 @@ Program your agent and train it
 
 - Zip your trained agent.
 - Submit your agent to the competition. 
-- Submission will be opened from 3 July 2018 and closed at 22 July 2018 23:59 (GMT).
+- Submission will be opened from 4 July 2018 and closed at 29 July 2018 23:59 (GMT).
 
 *Remark: no feedback will be given until the bug report phase will start.*
 
 ### Bug Report Phase 
 
-- Submission will be closed at 22 July 2018 23:59 (GMT).
+- Submission will be closed at 29 July 2018 23:59 (GMT).
 - You will be contacted if we have problems running your agent on our server.
 
 ### Validation Phase
