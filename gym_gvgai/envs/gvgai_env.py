@@ -61,7 +61,7 @@ class GVGAI_Env(gym.Env):
                 whether it's time to reset the environment again.
             info (dict):
                 info that can be added for debugging
-                info["winning"] == PLAYER_LOSES, PLAYER_WINS, NO_WINNER
+                info["winner"] == PLAYER_LOSES, PLAYER_WINS, NO_WINNER
         """
         state, reward, isOver, info = self.GVGAI.step(action)
         
