@@ -15,7 +15,7 @@ BasicGame
         avatar wfm > killIfHasMore limit=10 resource=wfm
         wfm avatar > killSprite 
         wfm wfm > killBoth
-        exit avatar > killSprite
+        exit avatar > killSprite scoreChange=2
     
     LevelMapping
         w > wall
