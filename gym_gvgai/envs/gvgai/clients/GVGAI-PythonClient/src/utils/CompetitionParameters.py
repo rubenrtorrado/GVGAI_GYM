@@ -17,8 +17,8 @@ class CompetitionParameters:
     USE_SOCKETS = True
     START_TIME = 1000
     INITIALIZATION_TIME =  1000
-    ACTION_TIME = np.inf #40
-    ACTION_TIME_DISQ = np.inf #50
+    ACTION_TIME = 40 # np.inf #40
+    ACTION_TIME_DISQ = 50 # np.inf #50
     MILLIS_IN_MIN = 60*1000
     TOTAL_LEARNING_TIME = np.inf #5*MILLIS_IN_MIN
     EXTRA_LEARNING_TIME = np.inf #1000

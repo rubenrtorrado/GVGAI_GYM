@@ -88,11 +88,10 @@ class ClientCommGYM:
             self.line = self.line.rstrip("\r\n")
             self.processLine(self.line)
             
-            #Score=self.sso.gameScore-self.lastScore
-            Score = self.reward()
+            score = self.reward()
             self.lastScore=self.sso.gameScore
         else:
-            Score=0
+            score=0
         
         if self.sso.isGameOver==True or self.sso.gameWinner=='PLAYER_WINS' or self.sso.phase == "FINISH" or self.sso.phase=="ABORT" or self.sso.phase=="End":
             self.sso.image = misc.imread(os.path.join(self.tempDir.name, 'gameStateByBytes.png'))
@@ -102,10 +101,11 @@ class ClientCommGYM:
             #self.lastScore=self.sso.gameScore
         else:
             self.sso.Terminal=False
+            actions=self.actions()
         
       
-        info = {'winner': self.sso.gameWinner}  
-        return self.sso.image,Score, self.sso.Terminal, info
+        info = {'winner': self.sso.gameWinner, 'actions': self.actions()}  
+        return self.sso.image, score, self.sso.Terminal, info
 
     def reset(self, lvl):
         #flag=True
@@ -333,7 +333,7 @@ class ClientCommGYM:
         #self.player.init(self.sso, ect.copy())
         #self.lastSsoType = self.player.lastSsoType
         self.lastSsoType = LEARNING_SSO_TYPE.IMAGE
-
+        actions=self.actions()
 
         if ect.exceededMaxTime():
             self.io.writeToServer(self.lastMessageId, "INIT_FAILED", self.LOG)
