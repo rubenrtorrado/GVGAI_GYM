@@ -2,8 +2,9 @@
 
 An [OpenAI Gym](gym.openai.com) environment for games written in the [Video Game Description Language](http://www.gvgai.net/vgdl.php), including the [Generic Video Game Competition](http://www.gvgai.net/) framework. 
 
-The framework, along with some initial reinforcement learning results, is covered in the paper [Deep Reinforcement Learning for General Video Game AI](https://arxiv.org/abs/1806.02448). This publication should also be cited if code from this project is used in any way:
+The framework, along with some initial reinforcement learning results, is covered in the paper [Deep Reinforcement Learning for General Video Game AI](https://arxiv.org/abs/1806.02448). This paper should be cited if code from this project is used in any way:
 
+```
 @inproceedings{torrado2018deep,
   title={Deep Reinforcement Learning for General Video Game AI},
   author={Torrado, Ruben Rodriguez and Bontrager, Philip and Togelius, Julian and Liu, Jialin and Perez-Liebana, Diego},
@@ -11,6 +12,7 @@ The framework, along with some initial reinforcement learning results, is covere
   year={2018},
   organization={IEEE}
 }
+```
 
 ## Installation
 
