@@ -5,12 +5,10 @@ An [OpenAI Gym](gym.openai.com) environment for games written in the [Video Game
 The framework, along with some initial reinforcement learning results, is covered in the paper [Deep Reinforcement Learning for General Video Game AI](https://arxiv.org/abs/1806.02448). This paper should be cited if code from this project is used in any way:
 
 ```
-@inproceedings{torrado2018deep,
-  title={Deep Reinforcement Learning for General Video Game AI},
-  author={Torrado, Ruben Rodriguez and Bontrager, Philip and Togelius, Julian and Liu, Jialin and Perez-Liebana, Diego},
-  booktitle={Computational Intelligence and Games (CIG), 2018 IEEE Conference on},
-  year={2018},
-  organization={IEEE}
+@article{justesen2018blood,
+  title={Blood Bowl: The Next Board Game Challenge for AI},
+  author={Justesen, Niels and Risi, Sebastian and Togelius, Julian},
+  year={2018}
 }
 ```
 
