@@ -15,7 +15,7 @@ for game in games:
         print('Starting ' + env.env.game + " with Level " + str(env.env.lvl))
         # reset environment
         stateObs = env.reset()
-        actions = env.env.GVGAI.actions()
+        actions = env.unwrapped.get_action_meanings()
         for t in range(2000):
             # choose action based on trained policy
             action_id = agent.act(stateObs, actions)
