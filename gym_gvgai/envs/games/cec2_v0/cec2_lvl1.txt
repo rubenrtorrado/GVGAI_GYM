@@ -1,0 +1,8 @@
+wwwwwwwwwwwwwwwwwww
+wA.......w........w
+w..bdbd..w..1010..w
+w..bdbb..w..1011..w
+w..bbbd..w..1110..w
+w..dddd..w..0000..w
+w........w........w
+wwwwwwwwwwwwwwwwwww

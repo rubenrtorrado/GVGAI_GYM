@@ -1,0 +1,47 @@
+BasicGame key_handler=Pulse square_size=40
+    SpriteSet
+        floor > Immovable img=newset/floor2
+        lightoff > Passive img=oryx/cspell1
+        lighton > Passive img=oryx/cspell2
+        avatar  > ShootAvatar stype=staff img=oryx/necromancer1
+        staff > Flicker limit=1 img=oryx/staff2 shrinkfactor=0.8 singleton=True
+        wall > Immovable img=oryx/wall3 autotiling=True
+
+        ok > Immovable invisible=True hidden=True
+        nook > Immovable invisible=True hidden=True
+
+        transits > Immovable invisible=True hidden=True
+            to_off >
+            to_on >
+            to_ok >
+            to_nook >
+
+    LevelMapping
+        0 > lightoff floor
+        1 > lighton floor
+
+        a > lighton ok floor
+        b > lightoff nook floor
+
+        c > lighton nook floor
+        d > lightoff ok floor
+
+        A > floor avatar
+        . > floor
+
+    InteractionSet
+        avatar wall > stepBack
+
+        lighton staff > transformTo stype=to_off
+        lightoff staff > transformTo stype=to_on
+        ok staff > transformTo stype=to_nook
+        nook staff > transformTo stype=to_ok
+
+        avatar TIME > transformToAll stype=to_off stypeTo=lightoff timer=1 repeating=True
+        avatar TIME > transformToAll stype=to_on stypeTo=lighton timer=1 repeating=True
+        avatar TIME > transformToAll stype=to_ok stypeTo=ok timer=1 repeating=True
+        avatar TIME > transformToAll stype=to_nook stypeTo=nook timer=1 repeating=True
+
+    TerminationSet
+        MultiSpriteCounter stype1=nook stype2=to_ok limit=0 win=True
+        Timeout limit=1000 win=False
