@@ -1,6 +1,7 @@
 package core.game;
 
 import core.competition.CompetitionParameters;
+import core.vgdl.VGDLRegistry;
 import tools.com.google.gson.Gson;
 import ontology.Types;
 import tools.ElapsedCpuTimer;
@@ -50,6 +51,7 @@ public class SerializableStateObservation {
     public ArrayList<Types.ACTIONS> availableActions;
     public HashMap<Integer, Integer> avatarResources;
     public Observation[][][] observationGrid;
+    public int spriteNumber;
     public int observationGridNum;
     public int observationGridMaxRow;
     public int observationGridMaxCol;
@@ -145,6 +147,8 @@ public class SerializableStateObservation {
         avatarMaxHealthPoints = s.getAvatarMaxHealthPoints();
         avatarLimitHealthPoints = s.getAvatarLimitHealthPoints();
         isAvatarAlive = s.isAvatarAlive();
+
+        spriteNumber = VGDLRegistry.GetInstance().numSpriteTypes();
     }
 
     private void buildDataArraylists(StateObservation s){
@@ -373,6 +377,7 @@ public class SerializableStateObservation {
                 ", phase=" + phase +
                 ", availableActions=" + availableActions +
                 ", avatarResources=" + avatarResources +
+                ", spriteNumber=" + spriteNumber +
                 ", observationGrid=" + Arrays.toString(observationGrid) +
                 ", NPCPositions=" + Arrays.toString(NPCPositions) +
                 ", immovablePositions=" + Arrays.toString(immovablePositions) +

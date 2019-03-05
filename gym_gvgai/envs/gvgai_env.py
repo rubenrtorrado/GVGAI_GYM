@@ -24,8 +24,8 @@ class GVGAI_Env(gym.Env):
     """
 
     def __init__(self, game, level, version):
-        self.__version__ = "0.0.2"
-        metadata = {'render.modes': ['human', 'rgb_array']}
+        self.__version__ = "0.0.4"
+        metadata = {'render.modes': ['human', 'rgb_array', 'ascii']}
 
         #Send the level to play
         self.GVGAI = gvgai.ClientCommGYM(game, version, level, dir)
@@ -35,6 +35,7 @@ class GVGAI_Env(gym.Env):
 
         self.actions = self.GVGAI.actions()
         self.img = self.GVGAI.sso.image
+        self.info = {}
         self.viewer = None
        
         #Only allow gridphysics games for now
@@ -66,6 +67,7 @@ class GVGAI_Env(gym.Env):
         state, reward, isOver, info = self.GVGAI.step(action)
         
         self.img = state
+        self.info = info
         return state, reward, isOver, info
 
     def reset(self):
@@ -82,6 +84,8 @@ class GVGAI_Env(gym.Env):
         img = self.img[:,:,:3]
         if mode == 'rgb_array':
             return img
+        elif mode == 'ascii':
+            return self.info['ascii']
         elif mode == 'human':
             from gym.envs.classic_control import rendering
             if self.viewer is None:

@@ -82,6 +82,7 @@ class Observation:
         if parse_Observation is None:
             self.category = -1
             self.itype = -1
+            self.itypeKey = ''
             self.obsID = -1
             self.position = Vector2d()
             self.reference = Vector2d()
@@ -89,6 +90,7 @@ class Observation:
         else:
             self.category = parse_Observation['category']
             self.itype = parse_Observation['itype']
+            self.itypeKey = parse_Observation['itypeKey']
             self.obsID = parse_Observation['obsID']
             self.position = Vector2d(parse_Observation['position'])
             self.reference = Vector2d(parse_Observation['reference'])

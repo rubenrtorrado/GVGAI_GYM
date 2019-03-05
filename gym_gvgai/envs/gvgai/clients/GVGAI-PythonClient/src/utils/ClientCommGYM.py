@@ -6,6 +6,7 @@ import random
 import tempfile
 import shutil
 
+import numpy as np
 from scipy import misc
 
 import subprocess
@@ -35,7 +36,7 @@ class ClientCommGYM:
         self.LOG = False
         self.player = None
         self.global_ect = None
-        self.lastSsoType = LEARNING_SSO_TYPE.JSON
+        self.lastSsoType = LEARNING_SSO_TYPE.BOTH #JSON
         
         self.sso.Terminal=False
 
@@ -104,7 +105,7 @@ class ClientCommGYM:
             actions=self.actions()
         
       
-        info = {'winner': self.sso.gameWinner, 'actions': self.actions()}  
+        info = {'winner': self.sso.gameWinner, 'grid': self.sso.observationGrid, 'ascii': self.sso.observationString}  
         return self.sso.image, score, self.sso.Terminal, info
 
     def reset(self, lvl):
@@ -207,14 +208,21 @@ class ClientCommGYM:
         parsed_input = json.loads(input)
         self.sso.__dict__.update(parsed_input)
         if parsed_input.get('observationGrid'):
-            self.sso.observationGrid = [[[None for j in range(self.sso.observationGridMaxCol)]
-                                         for i in range(self.sso.observationGridMaxRow)]
-                                        for k in range(self.sso.observationGridNum)]
-            for i in range(self.sso.observationGridNum):
-                for j in range(len(parsed_input['observationGrid'][i])):
-                    for k in range(len(parsed_input['observationGrid'][i][j])):
-                        self.sso.observationGrid[i][j][k] = Observation(parsed_input['observationGrid'][i][j][k])
-
+            # self.sso.observationGrid = [[[None for j in range(self.sso.observationGridMaxCol)]
+            #                              for i in range(self.sso.observationGridMaxRow)]
+            #                             for k in range(self.sso.observationGridNum)]
+            self.sso.observationGrid = np.zeros([self.sso.spriteNumber, self.sso.observationGridMaxRow, self.sso.observationGridNum])
+            observationString = [[] for _ in range(self.sso.observationGridMaxRow)]
+            for c, cols in enumerate(parsed_input['observationGrid']):
+                for r, row in enumerate(cols):
+                    string_obs = []
+                    for s, sprite in enumerate(row):
+                        obs = Observation(sprite)
+                        #self.sso.observationGrid[c][r][s] = obs
+                        self.sso.observationGrid[obs.itype][r][c] = 1
+                        string_obs.append(obs.itypeKey)
+                    observationString[r].append(' '.join(string_obs))
+            self.sso.observationString = '\n'.join([','.join(row) for row in observationString])
         if parsed_input.get('NPCPositions'):
             self.sso.NPCPositions = [[None for j in
                                       range(self.sso.NPCPositionsMaxRow)] for i in
@@ -332,7 +340,7 @@ class ClientCommGYM:
         ect.setMaxTimeMillis(CompetitionParameters.INITIALIZATION_TIME)
         #self.player.init(self.sso, ect.copy())
         #self.lastSsoType = self.player.lastSsoType
-        self.lastSsoType = LEARNING_SSO_TYPE.IMAGE
+        self.lastSsoType = LEARNING_SSO_TYPE.BOTH #IMAGE
         actions=self.actions()
 
         if ect.exceededMaxTime():
@@ -352,7 +360,7 @@ class ClientCommGYM:
         if (not action) or (action == ""):
             action = "ACTION_NIL"
         #self.lastSsoType = self.player.lastSsoType
-        self.lastSsoType = LEARNING_SSO_TYPE.IMAGE
+        self.lastSsoType = LEARNING_SSO_TYPE.BOTH #IMAGE
 
 
         if ect.exceededMaxTime():
