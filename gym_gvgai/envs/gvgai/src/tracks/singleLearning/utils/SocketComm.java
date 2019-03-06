@@ -42,6 +42,8 @@ public class SocketComm extends Comm {
             while (socket == null) {
                 ServerSocket serverSocket = new ServerSocket(port);
                 socket = serverSocket.accept();
+                // Send immediatly
+                socket.setTcpNoDelay(true);
             }
 
 
