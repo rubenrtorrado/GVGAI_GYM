@@ -997,7 +997,7 @@ public abstract class Game {
 			int remaining = (int) Math.max(0, delay - (now - then));
 
 			// Wait until de next cycle.
-			waitStep(remaining);
+			// waitStep(remaining);
 
 			// Draw all sprites in the panel.
 			view.paint(this.spriteGroups);
