@@ -10,8 +10,8 @@ BasicGame square_size=32
             alienGreen > img=oryx/alien3
             alienBlue > img=oryx/alien1
         portal  > invisible=True hidden=False
-        	portalSlow  > SpawnPoint   stype=alienBlue  cooldown=16   total=20 img=portal
-        	portalFast  > SpawnPoint   stype=alienGreen  cooldown=12   total=20 img=portal
+            portalSlow  > SpawnPoint   stype=alienBlue  cooldown=16   total=20 img=portal
+            portalFast  > SpawnPoint   stype=alienGreen  cooldown=12   total=20 img=portal
 
     LevelMapping
         . > background
