@@ -1,8 +1,8 @@
 BasicGame
   SpriteSet
     floor > Immovable randomtiling=0.9 img=oryx/floor3 hidden=True
-    goal  > Door color=GREEN img=oryx/doorclosed1
-    key   > Immovable color=ORANGE img=oryx/key2
+    goal  > Door singleton=True color=GREEN img=oryx/doorclosed1
+    key   > Immovable singleton=True color=ORANGE img=oryx/key2
     sword > OrientedFlicker limit=5 singleton=True img=oryx/slash1
     movable >
       avatar  > ShootAvatar   stype=sword frameRate=8
